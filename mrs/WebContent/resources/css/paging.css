@@ -1,0 +1,22 @@
+
+.clickable {
+	cursor: pointer;
+}
+	
+.pager{
+	float:left; width:100%; text-align:center; font-family:Tahoma; color:#a6a6a6;	font-size:8pt;
+}   
+/*
+.active{
+	color: red;
+	font-weight: bold;
+}
+*/
+#number							{text-align:center; padding-top:20px; padding-bottom:10px;width:100%;}
+#number .numberList				{text-align:center;}
+#number .numberCont				{}
+#number .numberList a			{float:left; text-decoration:none; color:#999999; padding:3px 5px 0px 5px;}
+#number .numberList a:hover		{color:#E0002A; padding:3px 5px 0px 5px;}
+#number .numberList .active		{color:#E0002A; padding:3px 5px 0px 5px; font-weight:bold;}
+#number .numberIconLeft			{float:left; border-right:1px solid; border-right-color:#cecece; padding:0px 5px 0px 8px;}
+#number .numberIconRight		{float:left; border-left:1px solid; border-left-color:#cecece; padding:0px 8px 0px 5px;}	

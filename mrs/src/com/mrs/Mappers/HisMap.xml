@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="His">
+<!-- 상점잔액충전관리 -->
+   <select id="getRechargeHisList" parameterType="com.mrs.Vo.His_RechargeVO" resultType="com.mrs.Vo.His_RechargeVO">
+	    SELECT	
+			a.b_id,
+			a.dest_id,
+			a.rs_flag,
+			a.up_date,
+			a.pay_type,
+			a.dest_name,
+			a.before_balance,
+			a.amount,
+			a.after_balance,
+			a.detail,
+			a.r_name,
+			a.address1,
+			a.address2,
+			a.up_op,
+			b.b_name
+		
+		FROM afd_Recharge_History a LEFT OUTER JOIN afd_BranchInfo b 
+		ON a.b_id = b.b_id
+		WHERE	1=1
+		AND length(dest_id) <![CDATA[>]]>  5
+		
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'
+	    </if>
+	    <if test="dest_id != '' and dest_id != null">
+	    	AND a.dest_id LIKE '%${dest_id}%'	
+	    </if>
+	    <if test="dest_name != '' and dest_name != null">
+	    	AND a.dest_name LIKE '%${dest_name}%'	
+	    </if>
+	    <if test="pay_type != '' and pay_type != null">
+	    	AND a.pay_type LIKE '%${pay_type}%'	
+	    </if>
+	    <choose>
+			<when test ="up_date_start != '' and up_date_start != null and up_date_end != '' and up_date_end != null">
+				AND a.up_date <![CDATA[ >= ]]> '${up_date_start}000000' AND a.up_date <![CDATA[ <= ]]> '${up_date_end}595959'
+			</when>
+			<otherwise>
+				AND a.up_date <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.up_date <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+	    ORDER BY a.up_date DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+   
+   <select id="getRechargeHisList_all" parameterType="com.mrs.Vo.His_RechargeVO" resultType="com.mrs.Vo.His_RechargeVO">
+	    SELECT	
+			a.b_id,
+			a.dest_id,
+			a.rs_flag,
+			a.up_date,
+			a.pay_type,
+			a.dest_name,
+			IFNULL(sum(a.before_balance),'0') as before_balance_all,
+			IFNULL(sum(a.amount),'0') as amount_all,
+			IFNULL(sum(a.after_balance),'0') as after_balance_all,
+			a.detail,
+			a.r_name,
+			a.address1,
+			a.address2,
+			a.up_op,
+			b.b_name
+		
+		FROM afd_Recharge_History a LEFT OUTER JOIN afd_BranchInfo b 
+		ON a.b_id = b.b_id
+		WHERE	1=1
+		AND length(dest_id) <![CDATA[>]]>  5
+		
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'
+	    </if>
+	    <if test="dest_id != '' and dest_id != null">
+	    	AND a.dest_id LIKE '%${dest_id}%'	
+	    </if>
+	     <if test="dest_name != '' and dest_name != null">
+	    	AND a.dest_name LIKE '%${dest_name}%'	
+	    </if>
+	    <if test="pay_type != '' and pay_type != null">
+	    	AND a.pay_type LIKE '%${pay_type}%'
+	    </if>
+	    <choose>
+			<when test ="up_date_start != '' and up_date_start != null and up_date_end != '' and up_date_end != null">
+				AND a.up_date <![CDATA[ >= ]]> '${up_date_start}000000' AND a.up_date <![CDATA[ <= ]]> '${up_date_end}595959'
+			</when>
+			<otherwise>
+				AND a.up_date <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.up_date <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+	    ORDER BY a.up_date DESC
+	</select>
+   
+   
+   <select id="getRechargeHisListCount" parameterType="com.mrs.Vo.His_RechargeVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_Recharge_History a  
+	    left outer join afd_BranchInfo b
+	    on a.b_id = b.b_id
+	    WHERE	1=1
+		AND length(dest_id) <![CDATA[>]]>  5
+		
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'
+	    </if>
+	    <if test="dest_id != '' and dest_id != null">
+	    	AND a.dest_id LIKE '%${dest_id}%'	
+	    </if>
+	     <if test="dest_name != '' and dest_name != null">
+	    	AND a.dest_name LIKE '%${dest_name}%'	
+	    </if>
+	    <if test="pay_type != '' and pay_type != null">
+	    	AND a.pay_type LIKE '%${pay_type}%'	
+	    </if>
+	    <choose>
+			<when test ="up_date_start != '' and up_date_start != null and up_date_end != '' and up_date_end != null">
+				AND a.up_date <![CDATA[ >= ]]> '${up_date_start}000000' AND a.up_date <![CDATA[ <= ]]> '${up_date_end}595959'
+			</when>
+			<otherwise>
+				AND a.up_date <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.up_date <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<!-- 지사잔액충전관리 -->
+   <select id="getRechargeHisList_branch" parameterType="com.mrs.Vo.His_RechargeVO" resultType="com.mrs.Vo.His_RechargeVO">
+	    SELECT	
+			a.b_id,
+			a.dest_id,
+			a.rs_flag,
+			a.up_date,
+			a.pay_type,
+			a.dest_name,
+			a.before_balance,
+			a.amount,
+			a.after_balance,
+			a.detail,
+			a.r_name,
+			a.address1,
+			a.address2,
+			a.up_op,
+			b.b_name
+		
+		FROM afd_Recharge_History a LEFT OUTER JOIN afd_BranchInfo b 
+		ON a.b_id = b.b_id
+		WHERE	1=1
+	    AND length(dest_id) <![CDATA[<]]>  6
+	    
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'
+	    </if>
+	    <if test="dest_id != '' and dest_id != null">
+	    	AND a.dest_id LIKE '%${dest_id}%'	
+	    </if>
+	    <if test="dest_name != '' and dest_name != null">
+	    	AND a.dest_name LIKE '%${dest_name}%'	
+	    </if>
+	    <if test="pay_type != '' and pay_type != null">
+	    	AND a.pay_type LIKE '%${pay_type}%'	
+	    </if>
+	    <choose>
+			<when test ="up_date_start != '' and up_date_start != null and up_date_end != '' and up_date_end != null">
+				AND a.up_date <![CDATA[ >= ]]> '${up_date_start}000000' AND a.up_date <![CDATA[ <= ]]> '${up_date_end}595959'
+			</when>
+			<otherwise>
+				AND a.up_date <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.up_date <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+	    ORDER BY a.up_date DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+   
+   <select id="getRechargeHisList_all_branch" parameterType="com.mrs.Vo.His_RechargeVO" resultType="com.mrs.Vo.His_RechargeVO">
+	    SELECT	
+			a.b_id,
+			a.dest_id,
+			a.rs_flag,
+			a.up_date,
+			a.pay_type,
+			a.dest_name,
+			IFNULL(sum(a.before_balance),'0') as before_balance_all,
+			IFNULL(sum(a.amount),'0') as amount_all,
+			IFNULL(sum(a.after_balance),'0') as after_balance_all,
+			a.detail,
+			a.r_name,
+			a.address1,
+			a.address2,
+			a.up_op,
+			b.b_name
+		
+		FROM afd_Recharge_History a LEFT OUTER JOIN afd_BranchInfo b 
+		ON a.b_id = b.b_id
+		WHERE	1=1
+	    AND length(dest_id) <![CDATA[<]]>  6
+	    
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'
+	    </if>
+	    <if test="dest_id != '' and dest_id != null">
+	    	AND a.dest_id LIKE '%${dest_id}%'	
+	    </if>
+	     <if test="dest_name != '' and dest_name != null">
+	    	AND a.dest_name LIKE '%${dest_name}%'	
+	    </if>
+	    <if test="pay_type != '' and pay_type != null">
+	    	AND a.pay_type LIKE '%${pay_type}%'
+	    </if>
+	    <choose>
+			<when test ="up_date_start != '' and up_date_start != null and up_date_end != '' and up_date_end != null">
+				AND a.up_date <![CDATA[ >= ]]> '${up_date_start}000000' AND a.up_date <![CDATA[ <= ]]> '${up_date_end}595959'
+			</when>
+			<otherwise>
+				AND a.up_date <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.up_date <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+	    ORDER BY a.up_date DESC
+	</select>
+   
+   
+   <select id="getRechargeHisListCount_branch" parameterType="com.mrs.Vo.His_RechargeVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_Recharge_History a  
+	    left outer join afd_BranchInfo b
+	    on a.b_id = b.b_id
+	    WHERE	1=1
+	    AND length(dest_id) <![CDATA[<]]>  6
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'
+	    </if>
+	    <if test="dest_id != '' and dest_id != null">
+	    	AND a.dest_id LIKE '%${dest_id}%'	
+	    </if>
+	     <if test="dest_name != '' and dest_name != null">
+	    	AND a.dest_name LIKE '%${dest_name}%'	
+	    </if>
+	    <if test="pay_type != '' and pay_type != null">
+	    	AND a.pay_type LIKE '%${pay_type}%'	
+	    </if>
+	    <choose>
+			<when test ="up_date_start != '' and up_date_start != null and up_date_end != '' and up_date_end != null">
+				AND a.up_date <![CDATA[ >= ]]> '${up_date_start}000000' AND a.up_date <![CDATA[ <= ]]> '${up_date_end}595959'
+			</when>
+			<otherwise>
+				AND a.up_date <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.up_date <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	
+	
+	
+	
+	<!-- 카드결제실패이력 -->
+   <select id="getRechargeHisList_cardfail" parameterType="com.mrs.Vo.His_CardfailVO" resultType="com.mrs.Vo.His_CardfailVO">
+	   	select 	a.b_id,
+				a.s_id,
+				a.r_id,
+				a.order_id,
+				a.payment_time,
+				a.card_payment_flag,
+				REPLACE(a.purchase_price,',','') as purchase_price,
+				a.card_payment_price,
+				a.credit_accept_number,
+				a.error_msg,
+				b.b_name,
+				convert(AES_DECRYPT(UNHEX(from_base64(d.r_name)), 'mrs_delivery!@#$')using UTF8) as r_name,
+				c.s_name 
+				from 
+				afd_Card_fail_history a 
+				left outer join  afd_BranchInfo b 
+				on a.b_id = b.b_id 
+				left outer join afd_storeinfo c 
+				on a.s_id = c.s_id 
+				left outer join afd_riderinfo d 
+				on a.r_id = d.r_id 
+				where 1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'
+	    </if>
+	    <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'	
+	    </if>
+	    <if test="s_name != '' and s_name != null">
+	    	AND c.s_name LIKE '%${s_name}%'	
+	    </if>
+	    <if test="r_id != '' and r_id != null">
+	    	AND a.r_id LIKE '%${r_id}%'	
+	    </if>
+	    <if test="r_name != '' and r_name != null">
+	    	AND d.r_name LIKE '%${r_name}%'	
+	    </if>
+	    <if test="order_id != '' and order_id != null">
+	    	AND a.order_id LIKE '%${order_id}%'	
+	    </if>
+	    <choose>
+			<when test ="up_date_start != '' and up_date_start != null and up_date_end != '' and up_date_end != null">
+				AND a.payment_time between '${up_date_start}000000' AND '${up_date_end}595959'
+			</when>
+			<otherwise>
+				AND a.payment_time between DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.payment_time and DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+	    ORDER BY a.payment_time DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+   
+   <select id="getRechargeHisList_all_cardfail" parameterType="com.mrs.Vo.His_CardfailVO" resultType="com.mrs.Vo.His_CardfailVO">
+	   SELECT
+			a.b_id,
+			a.s_id,
+			a.r_id,
+			a.order_id,
+			a.payment_time,
+			a.card_payment_flag,
+			IFNULL(sum(REPLACE(a.purchase_price,',','')),'0') as purchase_price_all,
+			IFNULL(sum(a.card_payment_price),'0') as card_payment_price_all,
+			a.credit_accept_number,
+			a.error_msg,
+			b.b_name,
+			convert(AES_DECRYPT(UNHEX(from_base64(d.r_name)), 'mrs_delivery!@#$')using UTF8) as r_name,
+			c.s_name 
+			from 
+			afd_Card_fail_history a 
+			left outer join  afd_BranchInfo b 
+			on a.b_id = b.b_id 
+			left outer join afd_storeinfo c 
+			on a.s_id = c.s_id 
+			left outer join afd_riderinfo d 
+			on a.r_id = d.r_id 
+			where 1=1
+	   <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'
+	    </if>
+	    <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'	
+	    </if>
+	    <if test="s_name != '' and s_name != null">
+	    	AND c.s_name LIKE '%${s_name}%'	
+	    </if>
+	    <if test="r_id != '' and r_id != null">
+	    	AND a.r_id LIKE '%${r_id}%'	
+	    </if>
+	    <if test="r_name != '' and r_name != null">
+	    	AND d.r_name LIKE '%${r_name}%'	
+	    </if>
+	    <if test="order_id != '' and order_id != null">
+	    	AND a.order_id LIKE '%${order_id}%'	
+	    </if>
+	    <choose>
+			<when test ="up_date_start != '' and up_date_start != null and up_date_end != '' and up_date_end != null">
+				AND a.payment_time between '${up_date_start}000000' AND '${up_date_end}595959'
+			</when>
+			<otherwise>
+				AND a.payment_time between DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.payment_time and DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+	    ORDER BY a.payment_time DESC
+	</select>
+   
+   
+   <select id="getRechargeHisListCount_cardfail" parameterType="com.mrs.Vo.His_CardfailVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    from 
+			afd_Card_fail_history a 
+			left outer join  afd_BranchInfo b 
+			on a.b_id = b.b_id 
+			left outer join afd_storeinfo c 
+			on a.s_id = c.s_id 
+			left outer join afd_riderinfo d 
+			on a.r_id = d.r_id 
+			where 1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'
+	    </if>
+	    <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'	
+	    </if>
+	    <if test="s_name != '' and s_name != null">
+	    	AND c.s_name LIKE '%${s_name}%'	
+	    </if>
+	    <if test="r_id != '' and r_id != null">
+	    	AND a.r_id LIKE '%${r_id}%'	
+	    </if>
+	    <if test="r_name != '' and r_name != null">
+	    	AND d.r_name LIKE '%${r_name}%'	
+	    </if>
+	    <if test="order_id != '' and order_id != null">
+	    	AND a.order_id LIKE '%${order_id}%'	
+	    </if>
+	    <choose>
+			<when test ="up_date_start != '' and up_date_start != null and up_date_end != '' and up_date_end != null">
+				AND a.payment_time between '${up_date_start}000000' AND '${up_date_end}595959'
+			</when>
+			<otherwise>
+				AND a.payment_time between DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.payment_time and DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

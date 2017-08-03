@@ -1,0 +1,39 @@
+@import url(http://fonts.googleapis.com/earlyaccess/jejugothic.css);
+
+#mainTable{
+	width:100%;
+}
+
+#searchTable{
+	border-collapse:collapse;
+	width:100%;
+	font-family: 'Jeju Gothic', sans-serif;
+	word-break:break-all;
+	text-align:center;
+}
+
+#mainTable th{
+	background-color:#b8e2fc;
+	font-family: sans-serif;
+	font-weight : bold;
+	font-size: 9pt;
+	word-break:break-all;
+	text-align:center;
+	padding:5px;
+}
+#mainTable tr th{
+	border:1px solid white;	
+}
+#mainTable tr td{
+	border-bottom:1px solid #ffffff;	
+}
+
+#mainTable td{
+	font-family: sans-serif;
+	font-size: 9pt;
+	word-break:break-all;
+	text-align:center;
+	/*padding:7px;*/
+	border-collapse:collapse;
+}
+

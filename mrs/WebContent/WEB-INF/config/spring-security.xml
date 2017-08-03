@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:p="http://www.springframework.org/schema/p" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/security
+                           http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+
+	<!-- 비밀번호 암호화 -->
+	 <bean id="passwordEncoder"  class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+         <constructor-arg value="256" />
+     </bean>
+     	<security:http pattern="/test.jsp" security="none"/>
+     	<security:http pattern="/BranchOffice_addr_CS" security="none"/>
+     	<security:http pattern="/BranchOffice_addr_CS2" security="none"/>
+     	<security:http pattern="/BranchOffice_addr_CS_get" security="none"/>
+     	<security:http pattern="/insertbranchoffice_addr_CS" security="none"/>
+     	<security:http pattern="/updatebranchoffice_addr_CS" security="none"/>
+     	<security:http pattern="/detailbranchoffice_addr_CS" security="none"/>
+     	<security:http pattern="/deletebranchoffice_addr_CS" security="none"/>
+     	<security:http pattern="/updateversion_CS" security="none"/>
+     	<security:http pattern="/daum_address.html" security="none"/>
+     	<security:http pattern="/fileupload.jsp" security="none"/>
+     	<security:http pattern="/store_csv_insert" security="none"/>
+     	<security:http pattern="/updatebranchofficeinfo_sw_ver" security="none"/>
+     	<security:http pattern="/updatebranchofficeinfo_s_sw_ver" security="none"/>
+     	<security:http pattern="/updatebranchofficeinfo_cid_sw_ver" security="none"/>
+     	<security:http pattern="/updatebranchofficeinfo_b_sw_ver" security="none"/>
+     	<security:http pattern="/updatebranchofficeinfo_r_sw_ver" security="none"/>
+     	<security:http pattern="/updatebranchofficeinfo_sapp_sw_ver" security="none"/>
+     	<security:http pattern="/branchoffice_selectgu" security="none"/>
+     	<security:http pattern="/branchoffice_selecttown" security="none"/>
+     	<security:http pattern="/login_access.jsp" security="none"/>
+     	
+     	<security:http pattern="/BranchOffice_store_CS" security="none"/>
+     	<security:http pattern="/BranchOffice_store_CS2" security="none"/>
+     	<security:http pattern="/BranchOffice_store_CS_get" security="none"/>
+     	<security:http pattern="/insertbranchoffice_store_CS" security="none"/>
+     	<security:http pattern="/updatebranchoffice_store_CS" security="none"/>
+     	<security:http pattern="/detailbranchoffice_store_CS" security="none"/>
+     	<security:http pattern="/deletebranchoffice_store_CS" security="none"/>
+     	<security:http pattern="/sample_csv_CS" security="none"/>
+     	
+		<security:http auto-config="true" use-expressions="true">
+		<security:intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" />
+		<!-- access denied page -->
+		
+		<security:form-login 
+		    login-page="/login" 
+		    default-target-url="/welcome" 
+			authentication-failure-url="/login?error" 
+			username-parameter="login_id"
+			password-parameter="login_passwd" 
+			/>
+		<security:logout logout-success-url="/login?logout" invalidate-session="true" delete-cookies="SPRING_SECURITY_REMEMBER_ME_COOKIE" />
+		<!-- 중복로그인 방지 -->
+		      <!-- 중복로그인 방지 -->
+      	<security:session-management invalid-session-url="/login?error=sessionExpired" session-authentication-error-url="/login?error=alreadyLogin">
+          <!--    <security:concurrency-control max-sessions="1" error-if-maximum-exceeded="true" /> 첫번째 세션만 허용 -->
+           <security:concurrency-control max-sessions="1"/>
+        </security:session-management>
+		<!-- enable csrf protection -->
+		<security:csrf/>
+	</security:http> 
+	<!-- 로그인 쿼리문 -->
+	<security:authentication-manager>
+    	<security:authentication-provider>
+    		<security:jdbc-user-service data-source-ref="dataSource"
+    		users-by-username-query="select login_id as login_id, login_passwd as login_passwd, enabled from AFD_USERINFO where login_id=?"
+      		authorities-by-username-query="select login_id as login_id, authority as role from AFD_USERINFO_AUTHORITY where login_id=?"/>
+      		<!-- 
+      		users-by-username-query="select login_id, login_passwd, enabled from AFD_USERINFO where login_id=?"
+      		authorities-by-username-query="select login_id, authority from AFD_USERINFO_AUTHORITY where login_id=?"/>
+      		 -->
+    	</security:authentication-provider>
+    </security:authentication-manager>
+</beans>
+

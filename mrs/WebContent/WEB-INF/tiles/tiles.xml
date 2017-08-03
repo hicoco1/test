@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+    <definition name=".loginForm"  template="/WEB-INF/views/login/login.jsp" />
+
+	<definition name=".main" template="/WEB-INF/views/layout/layout.jsp">
+		<put-attribute name="title" value="MRS" />
+		<put-attribute name="header" value="/WEB-INF/views/layout/header.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_headoffice.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp" />
+	    <put-attribute name="body" value="/WEB-INF/views/HeadOffice/HeadOffice_main.jsp" />
+	</definition>
+	
+	<!-- 본사관리 리스트 -->
+	<definition name=".HeadOffice_main" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/HeadOffice/HeadOffice_main.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_headoffice.jsp" />
+	</definition>
+	
+	<definition name=".HeadOffice_addr" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/HeadOffice/HeadOffice_addr.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_headoffice.jsp" />
+	</definition>
+	
+	<definition name=".HeadOffice_citygu" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/HeadOffice/HeadOffice_citygu.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_headoffice.jsp" />
+	</definition>
+	
+	<definition name=".HeadOffice_dong" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/HeadOffice/HeadOffice_dong.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_headoffice.jsp" />
+	</definition>
+	
+	<definition name=".HeadOffice_bank" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/HeadOffice/HeadOffice_bank.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_headoffice.jsp" />
+	</definition>
+	
+	<definition name=".HeadOffice_config" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/HeadOffice/HeadOffice_config.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_headoffice.jsp" />
+	</definition>
+	
+	<!-- 지사/상점관리 리스트 -->
+	<definition name=".BranchOffice_main" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/BranchOffice/BranchOffice_main.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_branchoffice.jsp" />
+	</definition>
+	
+	<definition name=".BranchOffice_main2" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/BranchOffice/BranchOffice_area.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_branchoffice.jsp" />
+	</definition>
+	
+	<definition name=".BranchOffice_main3" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/BranchOffice/BranchOffice_store.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_branchoffice.jsp" />
+	</definition>
+	
+	<definition name=".BranchOffice_main4" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/BranchOffice/BranchOffice_addr.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_branchoffice.jsp" />
+	</definition>
+	
+	<definition name=".BranchOffice_rider" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/BranchOffice/BranchOffice_rider.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_branchoffice.jsp" />
+	</definition>
+	
+	<!-- 지사 환경정보 관리 리스트 -->
+	<definition name=".BranchOfficeInfo_main" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/BranchOfficeInfo/BranchOfficeInfo_main.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_branchofficeinfo.jsp" />
+	</definition>
+	
+	<definition name=".BranchOfficeInfo_cid" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/BranchOfficeInfo/BranchOfficeInfo_cid.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_branchofficeinfo.jsp" />
+	</definition>
+	
+	<definition name=".BranchOfficeInfo_sw_ver" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/BranchOfficeInfo/BranchOfficeInfo_sw_ver.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_branchofficeinfo.jsp" />
+	</definition>
+	
+	<definition name=".BranchOfficeInfo_s_sw_ver" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/BranchOfficeInfo/BranchOfficeInfo_s_sw_ver.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_branchofficeinfo.jsp" />
+	</definition>
+	
+	<definition name=".BranchOfficeInfo_cid_sw_ver" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/BranchOfficeInfo/BranchOfficeInfo_cid_sw_ver.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_branchofficeinfo.jsp" />
+	</definition>
+	
+	<definition name=".BranchOfficeInfo_b_sw_ver" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/BranchOfficeInfo/BranchOfficeInfo_b_sw_ver.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_branchofficeinfo.jsp" />
+	</definition>
+	
+	<definition name=".BranchOfficeInfo_r_sw_ver" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/BranchOfficeInfo/BranchOfficeInfo_r_sw_ver.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_branchofficeinfo.jsp" />
+	</definition>
+	
+	<definition name=".BranchOfficeInfo_sapp_sw_ver" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/BranchOfficeInfo/BranchOfficeInfo_sapp_sw_ver.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_branchofficeinfo.jsp" />
+	</definition>
+	
+	<definition name=".BranchOfficeInfo_ann" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/BranchOfficeInfo/BranchOfficeInfo_ann.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_branchofficeinfo.jsp" />
+	</definition>
+	
+	<definition name=".developer_Fee_Config" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/BranchOfficeInfo/developer_Fee_Config.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_branchofficeinfo.jsp" />
+	</definition>
+	
+	<!-- 통계 리스트 -->
+	<definition name=".Statistics_main" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/Statistics/Statistics_main.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_statistics.jsp" />
+	</definition>
+	
+	<definition name=".Statistics_main2" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/Statistics/Statistics_rider.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_statistics.jsp" />
+	</definition>
+	
+	<definition name=".Statistics_store" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/Statistics/Statistics_store.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_statistics.jsp" />
+	</definition>
+	
+	<!-- 정산 리스트 -->
+	<definition name=".Calc_main" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/Calc/Calc_main.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_calc.jsp" />
+	</definition>
+	
+	<definition name=".Calc_store" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/Calc/Calc_store.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_calc.jsp" />
+	</definition>
+	
+	<definition name=".Calc_rider" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/Calc/Calc_rider.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_calc.jsp" />
+	</definition>
+	
+	<definition name=".Calc_storider" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/Calc/Calc_storider.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_calc.jsp" />
+	</definition>
+	
+	<definition name=".Calc_sol" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/Calc/Calc_sol.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_calc.jsp" />
+	</definition>
+	
+	<!-- 이력 리스트 -->
+	<definition name=".His_main" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/His/His_main.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_his.jsp" />
+	</definition>
+	
+	<definition name=".His_branch" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/His/His_branch.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_his.jsp" />
+	</definition>
+	
+	<definition name=".His_cardfail" extends=".main">
+		<put-attribute name="title" value="MRS" />		
+		<put-attribute name="body" value="/WEB-INF/views/His/His_cardfail.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/layout/left_his.jsp" />
+	</definition>
+</tiles-definitions>

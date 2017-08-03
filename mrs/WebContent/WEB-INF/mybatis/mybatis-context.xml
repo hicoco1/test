@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    
+    <bean id="propertyPlaceholderConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <value>/WEB-INF/mybatis/mybatis.properties</value>   
+        </property>
+    </bean>
+    
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+      <property name="driverClassName" value="com.mysql.jdbc.Driver" /> 
+      <property name="url" value="${jdbc.url}" />
+      <property name="username" value="${jdbc.username}" />
+      <property name="password" value="${jdbc.password}" />
+      <property name="validationQuery" value="select 1" />
+      <property name="testWhileIdle" value="true"/>
+      <property name="timeBetweenEvictionRunsMillis" value="7200000"/>      
+    </bean>
+    
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">     
+      <property name="dataSource" ref="dataSource" />                                      
+      <property name="mapperLocations" value="classpath:com/mrs/Mappers/*.xml" />
+      <property name="configLocation" value="/WEB-INF/mybatis/mybatis-config.xml" />       
+      <property name="transactionFactory">                                                
+            <bean class="org.apache.ibatis.transaction.managed.ManagedTransactionFactory" />
+      </property>
+    </bean>
+    
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+      <constructor-arg index="0" ref="sqlSessionFactory" /> 
+    </bean>
+<!-- =========================== DAO DEFINITIONS : IBATIS IMPLEMENTATIONS ============ -->    
+
+<!-- DB 연결하는 빈을 설정 아래와 같이 봐야한다. -->
+
+    <bean id="HeadOfficeDao" class="com.mrs.Dao.HeadOfficeDao">                             
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+    
+    <bean id="BranchOfficeDao" class="com.mrs.Dao.BranchOfficeDao">                             
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+   
+ 	<bean id="StatisticsDao" class="com.mrs.Dao.StatisticsDao">                             
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+    
+    <bean id="BranchInfoDao" class="com.mrs.Dao.BranchInfoDao">                             
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+    
+    <bean id="CalcDao" class="com.mrs.Dao.CalcDao">                             
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+    
+    <bean id="HisDao" class="com.mrs.Dao.HisDao">                             
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+
+</beans>

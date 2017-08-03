@@ -1,0 +1,67 @@
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted white; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: white;
+    color: #000000;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.Pstyle {
+	opacity: 0;
+	display: none;
+	position: relative;
+	width: auto;
+	border: 5px solid #fff;
+	padding: 20px;
+	background-color: #fff;
+}
+
+.b-close {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	padding: 15px;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.content{
+	height: auto;
+	width: auto;
+}
+
+#pop_header{
+	font-size: 20px;
+	text-align: center;
+}
+
+#pop_layout_btn{
+	float: right;
+}
+
+
+.ui-datepicker{ font-size: 12px; width: 200px; }
+.ui-datepicker select.ui-datepicker-month{ width:40%; font-size: 11px; }
+.ui-datepicker select.ui-datepicker-year{ width:60%; font-size: 11px; }
+
+/*
+table.ui-datepicker-calendar { display:none; }
+*/

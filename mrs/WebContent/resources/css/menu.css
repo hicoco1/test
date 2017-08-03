@@ -1,0 +1,187 @@
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700);
+@import url(http://fonts.googleapis.com/earlyaccess/jejugothic.css);
+/*
+@import url(http://fonts.googleapis.com/earlyaccess/Hanna.css);
+*/
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,300);
+@charset 'UTF-8';
+/* Base Styles */
+#cssmenu,
+#cssmenu ul,
+#cssmenu li,
+#cssmenu a {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  list-style: none;
+  font-weight: normal;
+  text-decoration: none;
+  line-height: 1;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  position: relative;
+}
+#cssmenu {
+  width: 200px;
+  /*border-bottom: 4px solid #0080ff;*/
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+#cssmenu a {
+  line-height: 1.3;
+}
+#cssmenu > ul > li:first-child {
+  background: #ffffff;
+  background: -moz-linear-gradient(#ffffff 0%, #ffffff 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #ffffff));
+  background: -webkit-linear-gradient(#ffffff 0%, #ffffff 100%);
+  background: linear-gradient(#ffffff 0%, #ffffff 100%);
+  border: 1px solid #ffffff;
+  -webkit-border-radius: 3px 3px 0 0;
+  -moz-border-radius: 3px 3px 0 0;
+  border-radius: 3px 3px 0 0;
+}
+#cssmenu > ul > li:first-child > a {
+  padding: 15px 10px;
+  background: url(/pacs/resources/images/pattern.png) top left repeat;
+  border: none;
+  -webkit-border-radius: 3px 3px 0 0;
+  -moz-border-radius: 3px 3px 0 0;
+  border-radius: 3px 3px 0 0;
+  font-family: 'Ubuntu', sans-serif;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 300;
+}
+#cssmenu > ul > li:first-child > a > span {
+  padding: 0;
+}
+#cssmenu > ul > li:first-child:hover {
+  
+  background: #ffffff;
+  background: -moz-linear-gradient(#ffffff 0%, #ffffff 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #ffffff));
+  background: -webkit-linear-gradient(#ffffff 0%, #ffffff 100%);
+  background: linear-gradient(#ffffff 0%, #ffffff 100%);
+}
+#cssmenu > ul > li {
+  background: #ffffff;
+  background: -moz-linear-gradient(#ffffff 0%, #ffffff 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #ffffff));
+  background: -webkit-linear-gradient(#ffffff 0%, #ffffff 100%);
+  background: linear-gradient(#ffffff 0%, #ffffff 100%);
+}
+#cssmenu > ul > li:hover {
+  background: #ffffff;
+  background: -moz-linear-gradient(#ffffff 0%, #ffffff 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #ffffff));
+  background: -webkit-linear-gradient(#ffffff 0%, #ffffff 100%);
+  background: linear-gradient(#ffffff 0%, #ffffff 100%);
+}
+#cssmenu > ul > li > a {
+  font-size: 14px;
+  display: block;
+  background: url(/pacs/resources/images/pattern.png) top left repeat;
+  color: #000000;
+  border-top: none;
+}
+#cssmenu > ul > li > a > span {
+  display: block;
+  padding: 12px 10px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+#cssmenu > ul > li > a:hover {
+  /*
+  text-decoration: none;
+  */
+  color: #87CEFA;
+}
+#cssmenu > ul > li.active {
+  border-bottom: none;
+}
+#cssmenu > ul > li.has-sub > a span {
+  background: url(/pacs/resources/images/icon_plus.png) 96% center no-repeat;
+}
+#cssmenu > ul > li.has-sub.active > a span {
+  background: url(/pacs/resources/images/icon_minus.png) 96% center no-repeat;
+}
+/* Sub menu */
+#cssmenu ul ul {
+  display: none;
+  background: #fff;
+  border-right: 1px solid #a2a194;
+  border-left: 1px solid #a2a194;
+}
+#cssmenu ul ul li {
+  padding: 0;
+  border-bottom: 1px solid #d4d4d4;
+  border-top: none;
+  background: #f7f7f7;
+  background: -moz-linear-gradient(#f7f7f7 0%, #ececec 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f7f7f7), color-stop(100%, #ececec));
+  background: -webkit-linear-gradient(#f7f7f7 0%, #ececec 100%);
+  background: linear-gradient(#f7f7f7 0%, #ececec 100%);
+}
+#cssmenu ul ul li:last-child {
+  border-bottom: none;
+}
+#cssmenu ul ul a {
+  padding: 10px 10px 10px 25px;
+  display: block;
+  color: #676767;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+#cssmenu ul ul a:before {
+  content: '»';
+  position: absolute;
+  left: 10px;
+  color: #804631;
+}
+
+#cssmenu ul ul a:hover {
+  color: #804631;
+}
+/*
+.currentActive span{
+	color:#ff0059;
+}
+*/
+#font {
+	font-family: 'Jeju Gothic', sans-serif;
+	font-size: 15px;
+	text-decoration: none;
+	/*
+	font-family: 'Hanna', serif;
+	*/
+}
+
+#error_font {
+	font-family: 'Jeju Gothic', sans-serif;
+	font-size: 30px;
+	text-decoration: none;
+	color: #8cd1fb;
+	/*
+	font-family: 'Hanna', serif;
+	*/
+}
+
+#font_little {
+	font-family: 'Jeju Gothic', sans-serif;
+	font-size: 13px;
+	text-align: right;
+	text-decoration: none;
+	/*
+	font-family: 'Hanna', serif;
+	*/
+}
+
+	a:link{color: black;}
+	a:visited{color: black;}
+	a:hover{color: #ff0059;}
+	a:active{color: #ff0059;}
+	

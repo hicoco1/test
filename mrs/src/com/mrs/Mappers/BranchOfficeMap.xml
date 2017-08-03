@@ -1,0 +1,2415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BranchOffice">
+<!-- 지사 정보 관리 -->
+   <select id="getBranchList" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="com.mrs.Vo.BranchOfficeVO">
+   	 select b_id,
+   			bid_flag,
+			b_name,
+			b_address,
+			b_crn,
+			b_tel1,
+			b_tel2,
+			login_id,
+			login_passwd,
+			active_status,
+			bc_type,
+			warning_amount,
+			suspend_amount,
+			max_call,
+			callcatch_penalty_value,
+			rider_delay_set,
+			rider_delay_duration,
+			alarm_limit_duration,
+			batch_extra_flag,
+			batch_extra_amount,
+			service_type,
+			charge_method,
+			basic_distance,
+			basic_charge,
+			add_distance,
+			add_charge,
+			open_time,
+			close_time,
+			v_bank,
+			v_account,
+			v_name,
+			contract_sdate,
+			contract_edate,
+			insert_date,
+			service_start_date,
+			update_date,
+			r_op_id,
+			u_op_id,
+			calculate_period,
+			calculate_date,
+			account_flag,
+			ridercard_flag
+			from afd_BranchInfo
+     		order by b_id DESC
+   </select>
+   <!-- 
+   <select id="getB_seq" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="String">
+   	 select ifnull(MAX(b_sequence),0)
+			from afd_config
+   </select>
+    -->
+   <select id="getModule_id" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="String">
+   	 select MODULE_ID from afd_network_info where b_id = '${b_id}'
+   </select>
+   
+   <select id="getauth" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="String">
+   	 select authority from AFD_USERINFO_AUTHORITY where login_id = '${username}'
+   </select>
+   
+   <select id="getB_seq" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="String">
+   	 	select bid_num_tbl.b_id 
+		from bid_num_tbl 
+		left join afd_branchinfo p 
+		on bid_num_tbl.b_id=right(p.b_id, 4)
+		where p.b_id is null 
+		order by bid_num_tbl.b_id
+		limit 1
+   </select>
+    
+   <select id="getversion" parameterType="com.mrs.Vo.BranchOffice_VerVO" resultType="String">
+   	 select BRANCH_ADDRESS_VERSION from afd_branch_address_version where b_id = '${b_id}'
+   </select>
+   
+   
+   <select id="getB_seq2" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="Integer">
+   	 select ifnull(MAX(b_sequence),0)
+			from afd_config
+   </select>
+   
+  			
+   <select id="getBranchOfficeList" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="com.mrs.Vo.BranchOfficeVO">
+	 SELECT b_id,
+			bid_flag,
+			b_name,
+			b_address,
+			b_crn,
+			b_tel1,
+			b_tel2,
+			login_id,
+			login_passwd,
+			active_status,
+			bc_type,
+			warning_amount,
+			suspend_amount,
+			max_call,
+			callcatch_penalty_value,
+			rider_delay_set,
+			rider_delay_duration,
+			alarm_limit_duration,
+			batch_extra_flag,
+			batch_extra_amount,
+			service_type,
+			charge_method,
+			basic_distance,
+			basic_charge,
+			add_distance,
+			add_charge,
+			open_time,
+			close_time,
+			v_bank,
+			v_account,
+			<!-- BJS 추가 -->
+			calculatepercall,
+			v_name,
+			contract_sdate,
+			contract_edate,
+			insert_date,
+			service_start_date,
+			update_date,
+			r_op_id,
+			u_op_id,
+			calculate_period,
+			calculate_date,
+			b_balance,
+			b_representative,
+			b_addr_appendix,
+			location_x,
+			location_y,
+			b_city_code,
+			b_dong_code,
+			b_gu_code,
+			b_town_code,
+			account_flag,
+			b_bank,
+			b_account,
+			ridercard_flag
+	    FROM	afd_BranchInfo
+	    WHERE	1=1
+	    <if test="b_name != '' and b_name != null">
+	    	AND b_name LIKE '%${b_name}%'	
+	    </if>
+	    <if test="b_id != '' and b_id != null">
+	    	AND b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="bid_flag != '' and bid_flag != null">
+	    	AND bid_flag LIKE '%${bid_flag}%'	
+	    </if>
+	    <if test="b_crn != '' and b_crn != null">
+	    	AND b_crn LIKE '%${b_crn}%'	
+	    </if>
+	    <if test="b_tel1 != '' and b_tel1 != null">
+	    	AND b_tel1 LIKE '%${b_tel1}%'	
+	    </if>
+	    <if test="b_tel2 != '' and b_tel2 != null">
+	    	AND b_tel2 LIKE '%${b_tel2}%'	
+	    </if>
+	     <if test="login_id != '' and login_id != null">
+	    	AND login_id LIKE '%${login_id}%'	
+	    </if>
+	    <if test="active_status != '' and active_status != null">
+	    	AND active_status LIKE '%${active_status}%'	
+	    </if>
+	    <if test="bc_type != '' and bc_type != null">
+	    	AND bc_type LIKE '%${bc_type}%'	
+	    </if>
+	    <if test="batch_extra_flag != '' and batch_extra_flag != null">
+	    	AND batch_extra_flag LIKE '%${batch_extra_flag}%'	
+	    </if>
+	     <if test="batch_extra_amount != '' and batch_extra_amount != null">
+	    	AND batch_extra_amount LIKE '%${batch_extra_amount}%'	
+	    </if>
+	    <if test="open_time != '' and open_time != null">
+	    	AND open_time LIKE '%${open_time}%'	
+	    </if>
+	    <if test="close_time != '' and close_time != null">
+	    	AND close_time LIKE '%${close_time}%'	
+	    </if>
+	    <if test="v_bank != '' and v_bank != null">
+	    	AND v_bank LIKE '%${v_bank}%'	
+	    </if>
+	     <if test="v_account != '' and v_account != null">
+	    	AND v_account LIKE '%${v_account}%'	
+	    </if>
+	    <if test="v_name != '' and v_name != null">
+	    	AND v_name LIKE '%${v_name}%'	
+	    </if>
+	    ORDER BY b_id DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+	
+	<select id="getBranchOfficeList_bank" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="com.mrs.Vo.BranchOfficeVO">
+      select bank_id, v_bank from afd_bankinfo where bank_use ='1'
+   </select>
+   
+   <select id="getBranchOfficeList_b_bank" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="com.mrs.Vo.BranchOfficeVO">
+      select bank_id, v_bank from afd_bankinfo
+   </select>
+   
+   <select id="getBranchOfficeList_bank_store" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="com.mrs.Vo.BranchOffice_StoreVO">
+      select bank_id, v_bank from afd_bankinfo where bank_use ='1'
+   </select>
+   
+   <select id="getBranchOfficeListCount" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_BranchInfo
+	    WHERE	1=1
+	    <if test="b_name != '' and b_name != null">
+	    	AND b_name LIKE '%${b_name}%'	
+	    </if>
+	    <if test="b_id != '' and b_id != null">
+	    	AND b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="bid_flag != '' and bid_flag != null">
+	    	AND bid_flag LIKE '%${bid_flag}%'	
+	    </if>
+	    <if test="b_crn != '' and b_crn != null">
+	    	AND b_crn LIKE '%${b_crn}%'	
+	    </if>
+	    <if test="b_tel1 != '' and b_tel1 != null">
+	    	AND b_tel1 LIKE '%${b_tel1}%'	
+	    </if>
+	    <if test="b_tel2 != '' and b_tel2 != null">
+	    	AND b_tel2 LIKE '%${b_tel2}%'	
+	    </if>
+	     <if test="login_id != '' and login_id != null">
+	    	AND login_id LIKE '%${login_id}%'	
+	    </if>
+	    <if test="active_status != '' and active_status != null">
+	    	AND active_status LIKE '%${active_status}%'	
+	    </if>
+	    <if test="bc_type != '' and bc_type != null">
+	    	AND bc_type LIKE '%${bc_type}%'	
+	    </if>
+	    <if test="batch_extra_flag != '' and batch_extra_flag != null">
+	    	AND batch_extra_flag LIKE '%${batch_extra_flag}%'	
+	    </if>
+	     <if test="batch_extra_amount != '' and batch_extra_amount != null">
+	    	AND batch_extra_amount LIKE '%${batch_extra_amount}%'	
+	    </if>
+	    <if test="open_time != '' and open_time != null">
+	    	AND open_time LIKE '%${open_time}%'	
+	    </if>
+	    <if test="close_time != '' and close_time != null">
+	    	AND close_time LIKE '%${close_time}%'	
+	    </if>
+	    <if test="v_bank != '' and v_bank != null">
+	    	AND v_bank LIKE '%${v_bank}%'	
+	    </if>
+	     <if test="v_account != '' and v_account != null">
+	    	AND v_account LIKE '%${v_account}%'	
+	    </if>
+	    <if test="v_name != '' and v_name != null">
+	    	AND v_name LIKE '%${v_name}%'	
+	    </if>
+	</select>
+	
+	 <select id="getloginidCount" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="Integer">
+	   select sum(total) from
+		(
+			select count(*) as total FROM afd_BranchInfo WHERE login_id = #{login_id}
+			union all
+			select count(*) as total from afd_storeinfo WHERE login_id = #{login_id}
+			union all
+			select count(*) as total from afd_riderinfo WHERE login_id = #{login_id}
+		)x
+	</select>
+	
+	 <select id="getloginidCount_store" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="Integer">
+	    select sum(total) from
+		(
+			select count(*) as total FROM afd_BranchInfo WHERE login_id = #{login_id}
+			union all
+			select count(*) as total from afd_storeinfo WHERE login_id = #{login_id}
+			union all
+			select count(*) as total from afd_riderinfo WHERE login_id = #{login_id}
+		)x
+	</select>
+	
+	 <select id="getloginidCount_rider" parameterType="com.mrs.Vo.BranchOffice_RiderVO" resultType="Integer">
+	    select sum(total) from
+		(
+			select count(*) as total FROM afd_BranchInfo WHERE login_id = #{login_id}
+			union all
+			select count(*) as total from afd_storeinfo WHERE login_id = #{login_id}
+			union all
+			select count(*) as total from afd_riderinfo WHERE login_id = #{login_id}
+		)x
+	</select>
+	
+	<select id="getv_account" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="String">
+	 	SELECT v_account
+	 			FROM afd_Bank_V_Account 
+		WHERE v_bank = '${v_bank}' and V_ACCOUNT_USE='0' limit 1
+	    <include refid="Paging.mysql"/>
+	</select>
+	
+	<select id="getv_account_store" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="String">
+	 	SELECT v_account
+	 			FROM afd_Bank_V_Account 
+		WHERE v_bank = '${v_bank}' and V_ACCOUNT_USE='0' limit 1
+	    <include refid="Paging.mysql"/>
+	</select>
+	
+	<select id="getv_bank" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="String">
+	 	SELECT v_bank
+	 			FROM afd_BranchInfo 
+		WHERE b_id = '${b_id}'
+	</select>
+	
+	<select id="getv_bank_store" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="String">
+	 	SELECT v_bank
+	 			FROM afd_StoreInfo 
+		WHERE b_id = '${b_id}' and s_id = '${s_id}'
+	</select>
+	
+	<select id="getb_representative" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="String">
+	 	SELECT b_representative FROM afd_branchInfo WHERE b_id = '${b_id}'
+	</select>
+	
+	<select id="gets_seq" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="String">
+	 	select S_SEQUENCE from afd_branchinfo where b_id = '${b_id}'
+	</select>
+	
+	<select id="getv_account2" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="String">
+	 	SELECT v_account
+	 			FROM afd_BranchInfo 
+		WHERE b_id = '${b_id}'
+	</select>
+	
+	<select id="getv_account2_store" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="String">
+	 	SELECT v_account
+	 			FROM afd_StoreInfo 
+		WHERE b_id = '${b_id}' and s_id = '${s_id}'
+	</select>
+	
+	<select id="getv_name" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="String">
+	 	SELECT b_representative
+	 			FROM afd_BranchInfo 
+		WHERE b_id = '${b_id}'
+	</select>
+	
+	<select id="getv_name_store" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="String">
+	 	SELECT s_representative
+	 			FROM afd_StoreInfo 
+		WHERE b_id = '${b_id}' and s_id = '${s_id}'
+	</select>
+	
+	<select id="getorg_v_name" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="String">
+	 	SELECT org_v_name
+	 			FROM afd_vbank_change_branch 
+		WHERE b_id = '${b_id}'
+	</select>
+	
+	<select id="getcontract_sdate" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="String">
+	 	SELECT contract_sdate
+	 			FROM afd_BranchInfo 
+		WHERE b_id = '${b_id}'
+	</select>
+	
+	<select id="getcontract_sdate_store" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="String">
+	 	SELECT contract_sdate
+	 			FROM afd_storeInfo 
+		WHERE b_id = '${b_id}' and s_id = '${s_id}'
+	</select>
+	
+	<select id="getcontract_edate" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="String">
+	 	SELECT contract_edate
+	 			FROM afd_BranchInfo 
+		WHERE b_id = '${b_id}'
+	</select>
+	
+	<select id="getcontract_edate_store" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="String">
+	 	SELECT contract_edate
+	 			FROM afd_storeInfo 
+		WHERE b_id = '${b_id}' and s_id = '${s_id}'
+	</select>
+	
+	<select id="getorg_contract_sdate" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="String">
+	 	SELECT contract_sdate
+	 			FROM afd_BranchInfo 
+		WHERE b_id = '${b_id}'
+	</select>
+	
+	<select id="getorg_contract_sdate_store" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="String">
+	 	SELECT contract_sdate
+	 			FROM afd_storeInfo 
+		WHERE b_id = '${b_id}' and s_id = '${s_id}'
+	</select>
+	
+	<select id="getorg_contract_edate" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="String">
+	 	SELECT contract_edate
+	 			FROM afd_BranchInfo 
+		WHERE b_id = '${b_id}'
+	</select>
+	
+	<select id="getorg_contract_edate_store" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="String">
+	 	SELECT contract_edate
+	 			FROM afd_storeInfo 
+		WHERE b_id = '${b_id}' and s_id = '${s_id}'
+	</select>
+	
+	<insert id="insertBranchOffice" parameterType="com.mrs.Vo.BranchOfficeVO">
+	    INSERT 	INTO afd_BranchInfo (
+	   		b_id,
+			bid_flag,
+			b_name,
+			b_address,
+			b_crn,
+			b_tel1,
+			b_tel2,
+			login_id,
+			login_passwd,
+			active_status,
+			bc_type,
+			warning_amount,
+			suspend_amount,
+			max_call,
+			callcatch_penalty_value,
+			rider_delay_set,
+			rider_delay_duration,
+			alarm_limit_duration,
+			batch_extra_flag,
+			batch_extra_amount,
+			service_type,
+			charge_method,
+			basic_distance,
+			basic_charge,
+			add_distance,
+			add_charge,
+			open_time,
+			close_time,
+			<!-- 
+			v_bank,
+			v_account,
+			v_name,
+			s_sequence,
+			r_sequence,
+			 -->
+			<!-- BJS 추가 -->
+			calculatepercall,
+			contract_sdate,
+			contract_edate,
+			insert_date,
+			service_start_date,
+			update_date,
+			r_op_id,
+			u_op_id,
+			calculate_period,
+			calculate_date,
+			b_balance,
+			b_representative,
+			location_x,
+			location_y,
+			b_addr_appendix,
+			b_city_code,
+			b_gu_code,
+			b_dong_code,
+			b_town_code,
+			account_flag,
+			ridercard_flag
+	    )
+	    VALUES	(
+	    #{b_id},
+	    #{bid_flag},
+	    #{b_name},
+	    #{b_address},
+	    #{b_crn},
+	    #{b_tel1},
+	    #{b_tel2},
+	    #{login_id},
+	    SHA2(#{login_passwd}, 256),
+	    #{active_status},
+	    #{bc_type},
+	    #{warning_amount},
+	    #{suspend_amount},
+	    #{max_call},
+	    #{callcatch_penalty_value},
+	    #{rider_delay_set},
+	    #{rider_delay_duration},
+	    #{alarm_limit_duration},
+	    #{batch_extra_flag},
+	    #{batch_extra_amount},
+		#{service_type},
+		#{charge_method},
+		#{basic_distance},
+		#{basic_charge},
+		#{add_distance},
+		#{add_charge},
+	    #{open_time},
+	    #{close_time},
+	     <!--
+	    #{v_bank},
+	    #{v_account},
+	    #{v_name},
+	     #{s_sequence},
+	    #{r_sequence},
+	     -->
+	    <!-- BJS 추가 -->
+		#{calculatepercall},
+	    #{contract_sdate},
+	    #{contract_edate},
+	    #{insert_date},
+	    #{service_start_date},
+	    #{update_date},
+	    #{r_op_id},
+	    #{u_op_id},
+	    #{calculate_period},
+	    #{calculate_date},
+	    #{b_balance},
+	    #{b_representative},
+	    #{location_x},
+	    #{location_y},
+		#{b_addr_appendix},
+		#{b_city_code},
+		#{b_gu_code},
+		#{b_dong_code},
+		#{b_town_code},
+		#{account_flag},
+		#{ridercard_flag}
+	    )	    	    
+	</insert>
+	
+	<insert id="insertrechrg_his" parameterType="com.mrs.Vo.BranchOfficeVO">
+	    INSERT 	INTO afd_Recharge_History(
+	   		b_id,
+	   		dest_id,
+	   		rs_flag,
+	   		up_date,
+	   		pay_type,
+	   		dest_name,
+	   		before_balance,
+	   		amount,
+	   		after_balance,
+	   		detail,
+	   		up_op
+	    )
+	    VALUES	(
+	    	#{b_id},
+	    	#{b_id},
+	   		'0',
+	   		DATE_FORMAT(now(),'%Y%m%d%H%i%s'),
+	   		'1',
+	   		#{b_name},
+	   		#{b_balance_before},
+	   		#{b_balance},
+	   		#{b_balance_after},
+	   		'WEB에서 충전',
+	   		#{username}
+	    )	    	    
+	</insert>
+	
+	<insert id="insertnetworkinfo" parameterType="com.mrs.Vo.BranchOfficeVO">
+	    INSERT 	INTO afd_network_info(
+	   		b_id,
+	   		ip_addr,
+	   		module_id,
+	   		http_port,
+	   		tcp_port,
+	   		cs_heartbeat_period,
+	   		app_heartbeat_period,
+	   		app_polling_period
+	    )
+	    VALUES	(
+	    	#{b_id},
+	    	#{ip_addr},
+	    	#{module_id},
+	    	#{http_port},
+	    	#{tcp_port},
+	    	#{cs_heartbeat_period},
+	    	#{app_heartbeat_period},
+	    	#{app_polling_period}
+	    )	    	    
+	</insert>
+	
+	<insert id="insertaddrver" parameterType="String">
+	    INSERT 	INTO afd_branch_address_version(
+	   		b_id,
+	   		branch_address_version,
+	   		branch_address_update
+	    )
+	    VALUES	(
+	    	#{b_id},
+	    	'1.0.0.0',
+	    	DATE_FORMAT(now(), '%Y%m%d')
+	    )	    	    
+	</insert>
+	
+	<insert id="insertsessioninfo1" parameterType="String">
+	    INSERT 	INTO afd_branch_session_info(b_id, cs_app_flag) VALUES (#{b_id}, '1')	    	    
+	</insert>
+	
+	<insert id="insertsessioninfo2" parameterType="String">
+	    INSERT 	INTO afd_branch_session_info(b_id, cs_app_flag) VALUES (#{b_id}, '2')	    	    
+	</insert>
+	
+	<insert id="insertsessioninfo_s1" parameterType="com.mrs.Vo.BranchOffice_StoreVO">
+	    INSERT 	INTO afd_store_session_info (b_id, s_id, cs_app_flag) VALUES (#{b_id}, #{s_id}, 1)	    	    
+	</insert>
+	
+	<insert id="insertsessioninfo_s2" parameterType="com.mrs.Vo.BranchOffice_StoreVO">
+	    INSERT 	INTO afd_store_session_info (b_id, s_id, cs_app_flag) VALUES (#{b_id}, #{s_id}, 2)	    	    
+	</insert>
+	
+	<insert id="insertsessioninfo_s3" parameterType="com.mrs.Vo.BranchOffice_StoreVO">
+	    INSERT 	INTO afd_store_session_info (b_id, s_id, cs_app_flag) VALUES (#{b_id}, #{s_id}, 3)	    	    
+	</insert>
+	
+	
+	
+	<insert id="insertvbankchg" parameterType="com.mrs.Vo.BranchOfficeVO">
+	    INSERT 	INTO afd_vbank_change_branch (
+	   		b_id,
+			info_flag, 
+			v_bank, 
+			v_account,
+			v_name,
+			reg_date,
+			contract_sdate,
+			contract_edate
+	    )
+	    VALUES	(
+	    #{b_id},
+	    1,
+	    #{v_bank},
+	    #{v_account},
+	    #{b_representative},
+	    now(),
+	    #{contract_sdate},
+		#{contract_edate}
+	    )	    	    
+	</insert>
+	
+	<update id="updateB_seq" parameterType="com.mrs.Vo.BranchOfficeVO">
+	    UPDATE afd_config set 
+	    	b_sequence = #{b_seq}+1
+	    	where b_sequence = #{b_seq}
+	</update>
+	
+	
+	<insert id="insertversion" parameterType="com.mrs.Vo.BranchOffice_VerVO">
+	    INSERT 	INTO afd_branch_address_version(
+	    	b_id,
+	    	branch_address_version,
+	    	branch_address_update
+	    )values(
+	   		#{b_id},
+		    #{branch_address_version},
+		    #{branch_address_update}
+	    )
+	</insert>
+	
+	<update id="updateversion" parameterType="com.mrs.Vo.BranchOffice_VerVO">
+	    UPDATE afd_branch_address_version set 
+	    	branch_address_version = #{branch_address_version}   
+	    	where b_id = #{b_id}
+	</update>
+	
+	<insert id="updatevbankchg" parameterType="com.mrs.Vo.BranchOfficeVO">
+	    INSERT 	INTO afd_vbank_change_branch (
+	   		b_id, 
+	   		info_flag, 
+	   		v_bank, 
+	   		v_name, 
+	   		v_account,
+	   		org_v_bank, 
+	   		org_v_account,
+	   		org_v_name,
+	   		reg_date,
+	   		org_contract_sdate,
+			org_contract_edate,
+			contract_sdate,
+			contract_edate
+	    )
+		    VALUES	(
+		    #{b_id},
+		    2,
+		    #{v_bank},
+		    #{b_representative},
+		    #{v_account},
+		    #{org_v_bank},
+		    #{org_v_account},
+		    #{org_b_representative},
+		    now(),
+		    #{org_contract_sdate},
+			#{org_contract_edate},
+			#{contract_sdate},
+			#{contract_edate}
+	    )	    	    
+	</insert>
+	
+	<insert id="deletevbankchg" parameterType="com.mrs.Vo.BranchOfficeVO">
+	    INSERT 	INTO afd_vbank_change_branch (
+	   		b_id,
+			info_flag, 
+			v_bank, 
+			v_account,
+			v_name,
+			org_v_bank, 
+	   		org_v_account,
+	   		org_v_name,
+	   		reg_date,
+	   		org_contract_sdate,
+			org_contract_edate,
+			contract_sdate,
+			contract_edate
+	    )
+	    VALUES	(
+	    #{b_id},
+	    3,
+	    #{v_bank},
+	    #{v_account},
+	    #{org_v_name},
+	    #{org_v_bank},
+		#{org_v_account},
+		#{org_v_name},
+		now(),
+		#{org_contract_sdate},
+		#{org_contract_edate},
+		#{org_contract_sdate},
+		#{org_contract_edate}
+	    )	    	    
+	</insert>
+	
+	
+	<update id="updateBranchOffice" parameterType="com.mrs.Vo.BranchOfficeVO">
+	    UPDATE afd_BranchInfo set 
+	    	bid_flag = #{bid_flag},
+	    	b_name = #{b_name},
+	    	b_address = #{b_address},
+	    	b_crn = #{b_crn},
+	    	b_tel1 = #{b_tel1},
+	    	b_tel2 = #{b_tel2},
+	    	login_id = #{login_id},
+	    	<if test="login_passwd != '' and login_passwd != null">
+	    	login_passwd = SHA2(#{login_passwd}, 256),
+	    	</if>
+	    	active_status = #{active_status},
+	    	bc_type = #{bc_type},
+	    	warning_amount = #{warning_amount},
+	    	suspend_amount = #{suspend_amount},
+	    	max_call = #{max_call},
+	    	callcatch_penalty_value = #{callcatch_penalty_value},
+	    	rider_delay_set = #{rider_delay_set},
+	    	rider_delay_duration = #{rider_delay_duration},
+	    	alarm_limit_duration = #{alarm_limit_duration},
+	    	batch_extra_flag = #{batch_extra_flag},
+	    	batch_extra_amount = #{batch_extra_amount},
+			service_type = #{service_type},
+			charge_method = #{charge_method},
+			basic_distance = #{basic_distance},
+			basic_charge = #{basic_charge},
+			add_distance = #{add_distance},
+			add_charge = #{add_charge},
+	    	open_time = #{open_time},
+	    	close_time = #{close_time},
+	    	<!-- 
+	    	v_bank = #{v_bank},
+	    	v_account = #{v_account},
+	    	v_name = #{v_name},
+	    	 -->
+	    	  <!-- BJS 추가 -->
+			calculatepercall = #{calculatepercall},
+	    	contract_sdate = #{contract_sdate},
+	    	contract_edate = #{contract_edate},
+	    	<!-- 
+	    	insert_date = #{insert_date},
+	    	 -->
+	    	service_start_date = #{service_start_date},
+	    	update_date = #{update_date},
+	    	<!-- 
+	    	r_op_id = #{r_op_id},
+	    	-->
+	    	u_op_id = #{u_op_id},
+	    	calculate_period = #{calculate_period},
+	    	calculate_date = #{calculate_date},
+	    	b_representative = #{b_representative},
+			b_addr_appendix = #{b_addr_appendix},
+			location_x = #{location_x},
+			location_y = #{location_y},
+			b_city_code = #{b_city_code},
+			b_gu_code = #{b_gu_code},
+			b_dong_code = #{b_dong_code},
+			b_town_code = #{b_town_code},
+			account_flag = #{account_flag},
+			ridercard_flag = #{ridercard_flag}
+	    	where b_id = #{b_id}
+	</update>
+	
+	<update id="updateb_balance" parameterType="com.mrs.Vo.BranchOfficeVO">
+	    UPDATE afd_BranchInfo set 
+	    	b_balance = b_balance + #{b_balance_rechrg}
+	    	where b_id = #{b_id}
+	</update>
+	
+	<delete id="deleteBranchOffice" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_BranchInfo	    
+	    where b_id = #{b_id}	    
+	</delete>
+	
+	<delete id="deletenetworkinfo" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_network_info
+	    where b_id = #{b_id}	    
+	</delete>
+	
+	<delete id="deleteaddrver" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_branch_address_version
+	    where b_id = #{b_id}	    
+	</delete>
+	
+	<delete id="deletesessioninfo" parameterType="String">
+	    DELETE FROM afd_branch_session_info where b_id = #{b_id}	    
+	</delete>
+	
+	<delete id="deletebranchcoverarea" parameterType="String">
+	    DELETE FROM afd_branchcoverarea where b_id = #{b_id}	    
+	</delete>
+	
+	<delete id="deletebranchaddress" parameterType="String">
+	    DELETE FROM afd_branch_address where b_id = #{b_id}	    
+	</delete>
+	
+	<delete id="deletesharedbranch" parameterType="String">
+	    DELETE FROM afd_shared_branch where b_id = #{b_id}	    
+	</delete>
+	
+	<delete id="deletesharedbranchs" parameterType="String">
+	    DELETE FROM afd_shared_branch where shared_b_id = #{b_id}	    
+	</delete>
+	
+	<delete id="deletestoreinfo" parameterType="String">
+	    DELETE FROM afd_storeinfo where b_id = #{b_id}	    
+	</delete>
+	
+	<delete id="deleteareaextra" parameterType="String">
+	    DELETE FROM afd_area_extra where s_id LIKE CONCAT(#{b_id},'%')	
+	</delete>
+	
+	<delete id="deletebasemenu" parameterType="String">
+	    DELETE FROM afd_basemenu where s_id LIKE CONCAT(#{b_id},'%')	
+	</delete>
+	
+	<delete id="deletefixedprice" parameterType="String">
+	    DELETE FROM afd_fixed_price where s_id LIKE CONCAT(#{b_id},'%')	
+	</delete>
+	
+	<delete id="deletefoodcategory" parameterType="String">
+	    DELETE FROM afd_foodcategory where s_id LIKE CONCAT(#{b_id},'%')
+	</delete>
+	
+	<delete id="deletestoresessioninfo" parameterType="String">
+	    DELETE FROM afd_store_session_info where b_id = #{b_id}	
+	</delete>
+	
+	<delete id="deletestorecoverarea" parameterType="String">
+	    DELETE FROM afd_storecoverarea where s_id LIKE CONCAT(#{b_id},'%')	
+	</delete>
+	
+	<delete id="deletetimeextra" parameterType="String">
+	    DELETE FROM afd_time_extra where s_id LIKE CONCAT(#{b_id},'%')	
+	</delete>
+	
+	<delete id="deleteriderinfo" parameterType="String">
+	    DELETE FROM afd_riderinfo where b_id = #{b_id}	
+	</delete>
+	
+	<delete id="deletesharedrider" parameterType="String">
+	    DELETE FROM afd_shared_rider where b_id = #{b_id}	
+	</delete>
+	
+	<delete id="deletesharedriders" parameterType="String">
+	    DELETE FROM afd_shared_rider where shared_b_id = #{b_id}	
+	</delete>
+	
+	<delete id="deleteridersessioninfo" parameterType="String">
+	    DELETE FROM afd_rider_session_info where b_id = #{b_id}	
+	</delete>
+	
+	<delete id="deleteridercatchcancel" parameterType="String">
+	    DELETE FROM afd_rider_catchcancel where b_id = #{b_id}	
+	</delete>
+	
+	<delete id="deleteannounce" parameterType="String">
+	    DELETE FROM afd_announce where org_id LIKE CONCAT(#{b_id},'%')
+	</delete>
+	
+	<delete id="deleteannounced" parameterType="String">
+	    DELETE FROM afd_announce where dest_id LIKE CONCAT(#{b_id},'%')
+	</delete>
+	
+	<delete id="afd_deleted_branchinfo" parameterType="String">
+		insert into afd_deleted_branchinfo select *, now() from afd_branchinfo where b_id = #{b_id}
+	</delete>
+	
+	<delete id="afd_deleted_storeinfo" parameterType="String">
+		insert into afd_deleted_storeinfo select *, now() from afd_storeinfo where s_id = #{s_id}
+	</delete>
+	
+	<delete id="afd_deleted_riderinfo" parameterType="String">
+		insert into afd_deleted_riderinfo select *, now() from afd_riderinfo where r_id = #{r_id}
+	</delete>
+	
+	<!-- 지사 관할지역 관리 -->	
+	<select id="getBranch_AreaList" parameterType="com.mrs.Vo.BranchOffice_AreaVO" resultType="com.mrs.Vo.BranchOffice_AreaVO">
+   	 select b_id,
+   	 		seq,
+   	 		cover_flag,
+   	 		city_code,
+   	 		gu_code,
+   	 		town_code
+			from afd_BranchCoverArea
+     		order by seq DESC
+   </select>
+   
+   <select id="getBranchOffice_AreaList" parameterType="com.mrs.Vo.BranchOffice_AreaVO" resultType="com.mrs.Vo.BranchOffice_AreaVO">
+	 SELECT a.b_id,
+   	 		a.seq,
+   	 		a.cover_flag,
+   	 		a.city_code,
+   	 		a.gu_code,
+   	 		a.town_code,
+   	 		b.b_name
+	    FROM	afd_BranchCoverArea a left outer join afd_BranchInfo b 
+		on a.b_id = b.b_id 
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="cover_flag != '' and cover_flag != null">
+	    	AND a.cover_flag LIKE '%${cover_flag}%'	
+	    </if>
+	     <if test="city_code != '' and city_code != null">
+	    	AND a.city_code LIKE '%${city_code}%'	
+	    </if>
+	    <if test="gu_code != '' and gu_code != null">
+	    	AND a.gu_code LIKE '%${gu_code}%'	
+	    </if>
+	    <if test="town_code != '' and town_code != null">
+	    	AND a.town_code LIKE '%${town_code}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+	    ORDER BY a.seq DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+   
+   <select id="getBranchOffice_AreaListCount" parameterType="com.mrs.Vo.BranchOffice_AreaVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_BranchCoverArea a left outer join afd_BranchInfo b 
+		on a.b_id = b.b_id 
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'		
+	    </if>
+	    <if test="cover_flag != '' and cover_flag != null">
+	    	AND a.cover_flag LIKE '%${cover_flag}%'	
+	    </if>
+	     <if test="city_code != '' and city_code != null">
+	    	AND a.city_code LIKE '%${city_code}%'	
+	    </if>
+	    <if test="gu_code != '' and gu_code != null">
+	    	AND a.gu_code LIKE '%${gu_code}%'	
+	    </if>
+	    <if test="town_code != '' and town_code != null">
+	    	AND a.town_code LIKE '%${town_code}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '${b_name}'	
+	    </if>
+	</select>
+	
+	
+	<select id="getBranchOffice_NationList" parameterType="com.mrs.Vo.BranchOffice_NationVO" resultType="com.mrs.Vo.BranchOffice_NationVO">
+	 	SELECT DISTINCT CITY_CODE
+		FROM afd_nation_citygu_code 
+		ORDER BY CITY_CODE ASC
+	    <include refid="Paging.mysql"/>
+	</select>
+	
+	<select id="getBranchOffice_GuList" parameterType="com.mrs.Vo.BranchOffice_NationVO" resultType="com.mrs.Vo.BranchOffice_NationVO">
+	 	SELECT DISTINCT GU_CODE
+	 			FROM afd_nation_citygu_code 
+		WHERE CITY_CODE = '${city_code}' ORDER BY GU_CODE ASC
+	    <include refid="Paging.mysql"/>
+	</select>
+	
+		
+	
+	<select id="getBranchOffice_TownList" parameterType="com.mrs.Vo.BranchOffice_NationVO" resultType="com.mrs.Vo.BranchOffice_NationVO">
+	 	SELECT DISTINCT TOWN_CODE
+	 			FROM afd_nation_citygu_code 
+		WHERE GU_CODE = '${gu_code}' ORDER BY TOWN_CODE ASC
+	    <include refid="Paging.mysql"/>
+	</select>
+	
+	<insert id="insertBranchOffice_Area" parameterType="com.mrs.Vo.BranchOffice_AreaVO">
+	    INSERT 	INTO afd_BranchCoverArea (
+	   		b_id,
+   	 		cover_flag,
+   	 		city_code,
+   	 		gu_code,
+   	 		town_code
+	    )
+		    VALUES	(
+		    #{b_id},
+		    #{cover_flag},
+		    #{city_code},
+		    #{gu_code},
+		    #{town_code}
+	    )	    	    
+	</insert>
+	
+	
+	<!-- 지사 주소 관리 메뉴 -->
+   <select id="insert_getMaxIdx_Addr" parameterType="com.mrs.Vo.BranchOffice_AddrVO" resultType="Integer">
+   	 select ifnull(MAX(idx),0)
+			from afd_Branch_Address
+			where b_id = #{b_id}
+   </select>
+   
+   <!-- 지사 주소 관리 중복체그 BJS -->
+   
+   <select id="Addr_ck" parameterType="com.mrs.Vo.BranchOffice_AddrVO" resultType="Integer">
+   	 select count(*) from afd_branchcoverarea 
+   	 where b_id = #{b_id}
+   	 <if test="city_code != null and city_code != ''">AND city_code = #{city_code}</if>
+   	 <if test="gu_code != null and gu_code != ''">AND gu_code = #{gu_code}</if>
+   	 <if test="town_code != null and town_code != ''">AND town_code = #{town_code}</if>
+   </select>
+	
+	<insert id="insertBranchOffice_Area2" parameterType="com.mrs.Vo.BranchOffice_AddrVO">
+	    insert into afd_branch_address
+			select
+			#{b_id},
+			@num:=@num+1,
+			city_code, gu_code, town_code, dong_code,
+			li_code, san_flag, ji_bonbun, ji_bubun,
+			building_name, building_dongho, road_codenum, road_code,
+			road_bonbun, road_bubun, full_addr, full_addr_road,
+			location_x, location_y
+			from (select @num:=#{idx}) k, afd_nation_address
+			where city_code = #{city_code}
+			<if test="gu_code != '' and gu_code != null">
+				and gu_code = #{gu_code}
+			</if>
+			<if test="town_code != '' and town_code != null">
+				and town_code = #{town_code}
+			</if>
+	</insert>
+	
+	<update id="updateBranchOffice_Area" parameterType="com.mrs.Vo.BranchOffice_AreaVO">
+	    UPDATE afd_BranchCoverArea set 
+	    	b_id = #{b_id},
+	    	cover_flag = #{cover_flag},
+	    	city_code = #{city_code},
+	    	gu_code = #{gu_code},
+	    	town_code = #{town_code}
+	    	where seq = #{seq}
+	</update>
+	
+	<delete id="deleteBranchOffice_Area" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_BranchCoverArea	    
+	    WHERE	seq = #{seq}	    
+	</delete>
+	
+	<delete id="deleteBranchOffice_Area2" parameterType="com.mrs.Vo.BranchOffice_AreaVO">
+	    DELETE 	
+	    FROM 	afd_Branch_address	    
+	    WHERE	b_id = #{b_id}	
+	    and city_code = #{city_code} 
+	    <if test="gu_code != '' and gu_code != null">
+	    	and gu_code = #{gu_code} 
+	    </if>
+	    <if test="town_code != '' and town_code != null">
+	    	and town_code = #{town_code}	
+	    </if>     
+	</delete>
+	
+	<!-- 상점 정보 관리 -->	
+	<select id="getBranch_StoreList" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="com.mrs.Vo.BranchOffice_StoreVO">
+   	 select b_id,
+		   	s_id,
+		   	s_crn,
+		   	s_name,
+		   	s_addr1,
+		   	s_addr2,
+		   	location_x,
+		   	location_y,
+		   	s_tel1,
+		   	s_tel2,
+		    login_id,
+		 	login_passwd,
+		  	active_status,
+		   	cook_time,
+		   	terminal_type,
+		   	cid_id,
+		   	cid_connect_status,
+		   	cid_port,
+		   	printer_id,
+		   	printer_connect_status,
+		   	printer_port,
+		    monthly_fee,
+		    basic_distance,
+		    basic_charge,
+		    add_distance,
+		    add_charge,
+		    service_type,
+		   	charge_method,
+		  	s_balance,
+		   	rider_delay_duration,
+		   	batch_extra_amount,
+		   	last_recharge_amount,
+		    last_recharge_date,
+		   	charge_type,
+		   	charge_option,
+		   	credit_used_flag,
+		   	credit_member_id,
+		   	noti_flag,
+		   	noti_rider_assign,
+		   	noti_card_pay,
+		   	open_time,
+		   	close_time,
+		   	monthly_order_count,
+		   	daily_order_count,
+		    cat_id,
+		   	van_id,
+		   	v_bank,
+		   	v_account,
+		   	v_name,
+		   	contract_sdate,
+		   	contract_edate,
+		   	insert_date,
+		   	service_start_date,
+		   	update_date,
+		   	r_op_id,
+		   	u_op_id,
+		    store_statement,
+		   	kitchen_statement,
+		   	customer_statement,
+		   	s_representative
+			from afd_StoreInfo
+     		order by s_id DESC
+   </select>
+   
+   <select id="getBranchOffice_StoreList" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="com.mrs.Vo.BranchOffice_StoreVO">
+	 SELECT a.b_id,
+		   	a.s_id,
+		   	a.s_crn,
+		   	a.s_name,
+		   	a.s_addr1,
+		   	a.s_addr2,
+		   	a.location_x,
+		   	a.location_y,
+		   	a.s_tel1,
+		   	a.s_tel2,
+		    a.login_id,
+		 	a.login_passwd,
+		  	a.active_status,
+		   	a.cook_time,
+		   	a.terminal_type,
+		   	a.cid_id,
+		   	a.cid_connect_status,
+		   	a.cid_port,
+		   	a.printer_id,
+		   	a.printer_connect_status,
+		   	a.printer_port,
+		    a.monthly_fee,
+		    a.basic_distance,
+		    a.basic_charge,
+		    a.add_distance,
+		    a.add_charge,
+		    a.service_type,
+		   	a.charge_method,
+		  	a.s_balance,
+		   	a.rider_delay_duration,
+		   	a.batch_extra_amount,
+		   	a.last_recharge_amount,
+		    a.last_recharge_date,
+		   	a.charge_type,
+		   	a.charge_option,
+		   	a.credit_used_flag,
+		   	a.credit_member_id,
+		   	a.noti_flag,
+		   	a.noti_rider_assign,
+		   	a.noti_card_pay,
+		   	a.open_time,
+		   	a.close_time,
+		   	a.monthly_order_count,
+		   	a.daily_order_count,
+		    a.cat_id,
+		   	a.van_id,
+		   	a.v_bank,
+		   	a.v_account,
+		   	a.v_name,
+		   	a.contract_sdate,
+		   	a.contract_edate,
+		   	a.insert_date,
+		   	a.service_start_date,
+		   	a.update_date,
+		   	a.r_op_id,
+		   	a.u_op_id,
+		    a.store_statement,
+		   	a.kitchen_statement,
+		   	a.customer_statement,
+		   	a.s_representative,
+		   	a.store_type,
+		   	a.s_addr_building,
+		   	a.s_addr_num,
+		   	a.s_addr_appendix,
+		   	b.b_name
+	    FROM	afd_StoreInfo a
+	    left outer join afd_branchInfo b
+	    on a.b_id = b.b_id
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'		
+	    </if>
+	    <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'		
+	    </if>
+	     <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'		
+	    </if>
+	    <if test="s_name != '' and s_name != null">
+	    	AND a.s_name LIKE '%${s_name}%'		
+	    </if>
+	     <if test="s_crn != '' and s_crn != null">
+	    	AND a.s_crn LIKE '%${s_crn}%'	
+	    </if>
+	    <if test="s_tel1 != '' and s_tel1 != null">
+	    	AND a.s_tel1 LIKE '%${s_tel1}%'	
+	    </if>
+	    <if test="s_tel2 != '' and s_tel2 != null">
+	    	AND a.s_tel2 LIKE '%${s_tel2}%'	
+	    </if>
+	     <if test="login_id != '' and login_id != null">
+	    	AND a.login_id LIKE '%${login_id}%'	
+	    </if>
+	    <if test="active_status != '' and active_status != null">
+	    	AND a.active_status LIKE '%${active_status}%'	
+	    </if>
+	    ORDER BY a.s_id DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+   
+   <select id="getBranchOffice_StoreListCount" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_StoreInfo a
+	    left outer join afd_branchinfo b
+	    on a.b_id = b.b_id
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'		
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'		
+	    </if>
+	    <if test="s_name != '' and s_name != null">
+	    	AND a.s_name LIKE '%${s_name}%'	
+	    </if>
+	     <if test="s_crn != '' and s_crn != null">
+	    	AND a.s_crn LIKE '%${s_crn}%'	
+	    </if>
+	    <if test="s_tel1 != '' and s_tel1 != null">
+	    	AND a.s_tel1 LIKE '%${s_tel1}%'	
+	    </if>
+	    <if test="s_tel2 != '' and s_tel2 != null">
+	    	AND a.s_tel2 LIKE '%${s_tel2}%'	
+	    </if>
+	     <if test="login_id != '' and login_id != null">
+	    	AND a.login_id LIKE '%${login_id}%'	
+	    </if>
+	    <if test="active_status != '' and active_status != null">
+	    	AND a.active_status LIKE '%${active_status}%'	
+	    </if>
+	</select>
+	
+	<!-- 상점정보관리CS -->
+	
+	<select id="getBranchOffice_StoreList_CS" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="com.mrs.Vo.BranchOffice_StoreVO">
+	 SELECT a.b_id,
+		   	a.s_id,
+		   	a.s_crn,
+		   	a.s_name,
+		   	a.s_addr1,
+		   	a.s_addr2,
+		   	a.location_x,
+		   	a.location_y,
+		   	a.s_tel1,
+		   	a.s_tel2,
+		    a.login_id,
+		 	a.login_passwd,
+		  	a.active_status,
+		   	a.cook_time,
+		   	a.terminal_type,
+		   	a.cid_id,
+		   	a.cid_connect_status,
+		   	a.cid_port,
+		   	a.printer_id,
+		   	a.printer_connect_status,
+		   	a.printer_port,
+		    a.monthly_fee,
+		    a.basic_distance,
+		    a.basic_charge,
+		    a.add_distance,
+		    a.add_charge,
+		    a.service_type,
+		   	a.charge_method,
+		  	a.s_balance,
+		   	a.rider_delay_duration,
+		   	a.batch_extra_amount,
+		   	a.last_recharge_amount,
+		    a.last_recharge_date,
+		   	a.charge_type,
+		   	a.charge_option,
+		   	a.credit_used_flag,
+		   	a.credit_member_id,
+		   	a.noti_flag,
+		   	a.noti_rider_assign,
+		   	a.noti_card_pay,
+		   	a.open_time,
+		   	a.close_time,
+		   	a.monthly_order_count,
+		   	a.daily_order_count,
+		    a.cat_id,
+		   	a.van_id,
+		   	a.v_bank,
+		   	a.v_account,
+		   	a.v_name,
+		   	a.contract_sdate,
+		   	a.contract_edate,
+		   	a.insert_date,
+		   	a.service_start_date,
+		   	a.update_date,
+		   	a.r_op_id,
+		   	a.u_op_id,
+		    a.store_statement,
+		   	a.kitchen_statement,
+		   	a.customer_statement,
+		   	a.s_representative,
+		   	a.s_addr_building,
+		   	a.s_addr_num,
+		   	a.s_addr_appendix,
+		   	a.store_type,
+		   	b.b_name
+	    FROM	afd_StoreInfo a
+	    left outer join afd_branchInfo b
+	    on a.b_id = b.b_id
+	    WHERE	1=1
+		AND a.b_id = '${b_id}'
+	    <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'		
+	    </if>
+	     <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'		
+	    </if>
+	    <if test="s_name != '' and s_name != null">
+	    	AND a.s_name LIKE '%${s_name}%'		
+	    </if>
+	     <if test="s_crn != '' and s_crn != null">
+	    	AND a.s_crn LIKE '%${s_crn}%'	
+	    </if>
+	    <if test="s_tel1 != '' and s_tel1 != null">
+	    	AND a.s_tel1 LIKE '%${s_tel1}%'	
+	    </if>
+	    <if test="s_tel2 != '' and s_tel2 != null">
+	    	AND a.s_tel2 LIKE '%${s_tel2}%'	
+	    </if>
+	     <if test="login_id != '' and login_id != null">
+	    	AND a.login_id LIKE '%${login_id}%'	
+	    </if>
+	    <if test="active_status != '' and active_status != null">
+	    	AND a.active_status LIKE '%${active_status}%'	
+	    </if>
+	    ORDER BY a.s_id DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+   
+   <select id="getBranchOffice_StoreListCount_CS" parameterType="com.mrs.Vo.BranchOffice_StoreVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_StoreInfo a
+	    left outer join afd_branchinfo b
+	    on a.b_id = b.b_id
+	    WHERE	1=1
+		AND a.b_id = '${b_id}'
+	    <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'		
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'		
+	    </if>
+	    <if test="s_name != '' and s_name != null">
+	    	AND a.s_name LIKE '%${s_name}%'	
+	    </if>
+	     <if test="s_crn != '' and s_crn != null">
+	    	AND a.s_crn LIKE '%${s_crn}%'	
+	    </if>
+	    <if test="s_tel1 != '' and s_tel1 != null">
+	    	AND a.s_tel1 LIKE '%${s_tel1}%'	
+	    </if>
+	    <if test="s_tel2 != '' and s_tel2 != null">
+	    	AND a.s_tel2 LIKE '%${s_tel2}%'	
+	    </if>
+	     <if test="login_id != '' and login_id != null">
+	    	AND a.login_id LIKE '%${login_id}%'	
+	    </if>
+	    <if test="active_status != '' and active_status != null">
+	    	AND a.active_status LIKE '%${active_status}%'	
+	    </if>
+	</select>
+	
+	
+	
+	
+	
+	
+	<insert id="insertBranchOffice_Store" parameterType="com.mrs.Vo.BranchOffice_StoreVO">
+	    INSERT 	INTO afd_StoreInfo (
+	   		b_id,
+		   	s_id,
+		   	s_crn,
+		   	s_name,
+		   	s_addr1,
+		   	s_addr2,
+		   	location_x,
+		   	location_y,
+		   	s_tel1,
+		   	s_tel2,
+		    login_id,
+		 	login_passwd,
+		  	active_status,
+		   	cook_time,
+		   	terminal_type,
+		   	cid_id,
+		   	cid_connect_status,
+		   	cid_port,
+		   	printer_id,
+		   	printer_connect_status,
+		   	printer_port,
+		    monthly_fee,
+		    basic_distance,
+		    basic_charge,
+		    add_distance,
+		    add_charge,
+		    service_type,
+		   	charge_method,
+		  	s_balance,
+		   	rider_delay_duration,
+		   	batch_extra_amount,
+		   	last_recharge_amount,
+		    last_recharge_date,
+		   	charge_type,
+		   	charge_option,
+		   	credit_used_flag,
+		   	<!--credit_member_id, -->
+		   	noti_flag,
+		   	noti_rider_assign,
+		   	noti_card_pay,
+		   	open_time,
+		   	close_time,
+		   	monthly_order_count,
+		   	daily_order_count,
+		    credit_member_id,
+		   	van_id,
+		   	<!-- 
+		   	v_bank,
+		   	v_name,
+		   	-->
+		   	contract_sdate,
+		   	contract_edate,
+		   	insert_date,
+		   	service_start_date,
+		   	update_date,
+		   	r_op_id,
+		   	u_op_id,
+		    store_statement,
+		   	kitchen_statement,
+		   	customer_statement,
+		   	s_representative,
+		   	store_type,
+		   	s_addr_building,
+		   	s_addr_num,
+		   	s_addr_appendix
+	    )
+	    VALUES	(
+	    #{b_id},
+	    #{s_id},
+	    #{s_crn},
+	    #{s_name},
+	    #{s_addr1},
+	    #{s_addr2},
+	    #{location_x},
+	    #{location_y},
+	    #{s_tel1},
+	    #{s_tel2},
+	    #{login_id},
+	    #{login_passwd},
+	    #{active_status},
+	    #{cook_time},
+	    #{terminal_type},
+	    #{cid_id},
+	    #{cid_connect_status},
+	    #{cid_port},
+	    #{printer_id},
+	    #{printer_connect_status},
+	    #{printer_port},
+	    #{monthly_fee},
+	    #{basic_distance},
+	    #{basic_charge},
+	    #{add_distance},
+	    #{add_charge},
+	    #{service_type},
+	    #{charge_method},
+	    #{s_balance},
+	    #{rider_delay_duration},
+	    #{batch_extra_amount},
+	    #{last_recharge_amount},
+	    #{last_recharge_date},
+	    #{charge_type},
+	    #{charge_option},
+	    #{credit_used_flag},
+	    <!-- #{credit_member_id}, -->
+	    #{noti_flag},
+	    #{noti_rider_assign},
+	    #{noti_card_pay},
+	    #{open_time},
+	    #{close_time},
+	    #{monthly_order_count},
+	    #{daily_order_count},
+	    #{cat_id},
+	    #{van_id},
+	    <!-- 
+	    #{v_bank},
+	    #{v_name},
+	    -->
+	    #{contract_sdate},
+	    #{contract_edate},
+	    #{insert_date},
+	    #{service_start_date},
+	    #{update_date},
+	    #{r_op_id},
+	    #{u_op_id},
+	    #{store_statement},
+	    #{kitchen_statement},
+	    #{customer_statement},
+	    #{s_representative},
+	    #{store_type},
+	    #{s_addr_building},
+		#{s_addr_num},
+		#{s_addr_appendix}
+	    )	    	    
+	</insert>
+	
+	<insert id="insertvbankchg_store" parameterType="com.mrs.Vo.BranchOffice_StoreVO">
+	    INSERT 	INTO afd_vbank_change_branch (
+	   		b_id,
+	   		s_id,
+			info_flag, 
+			v_bank, 
+			v_name,
+			reg_date,
+			contract_sdate,
+			contract_edate
+	    )
+	    VALUES	(
+		    #{b_id},
+		    #{s_id},
+		    1,
+		    #{v_bank},
+		    #{s_representative},
+		    now(),
+		    #{contract_sdate},
+			#{contract_edate}
+	    )	    	    
+	</insert>
+
+
+
+	<insert id="updatevbankchg_store" parameterType="com.mrs.Vo.BranchOffice_StoreVO">
+	    INSERT 	INTO afd_vbank_change_branch (
+	   		b_id, 
+	   		s_id,
+	   		info_flag, 
+	   		v_bank, 
+	   		v_name, 
+	   		org_v_bank, 
+	   		org_v_account,
+	   		org_v_name,
+	   		reg_date,
+	   		org_contract_sdate,
+			org_contract_edate,
+			contract_sdate,
+			contract_edate
+	    )
+		    VALUES	(
+		    #{b_id},
+		    #{s_id},
+		    2,
+		    #{v_bank},
+		    #{s_representative},
+		    #{org_v_bank},
+		    #{org_v_account},
+		    #{org_s_representative},
+		    now(),
+		    #{org_contract_sdate},
+			#{org_contract_edate},
+			#{contract_sdate},
+			#{contract_edate}
+	    )	    	    
+	</insert>
+
+
+
+<insert id="deletevbankchg_store" parameterType="com.mrs.Vo.BranchOffice_StoreVO">
+	    INSERT 	INTO afd_vbank_change_branch (
+	   		b_id,
+	   		s_id,
+			info_flag, 
+			v_bank, 
+			v_account,
+			v_name,
+			org_v_bank, 
+	   		org_v_account,
+	   		org_v_name,
+	   		reg_date,
+	   		org_contract_sdate,
+			org_contract_edate,
+			contract_sdate,
+			contract_edate
+	    )
+	    VALUES	(
+		    #{b_id},
+		    #{s_id},
+		    3,
+		    #{v_bank},
+		    #{v_account},
+		    #{s_representative},
+		    #{org_v_bank},
+			#{org_v_account},
+			#{s_representative},
+			now(),
+			#{org_contract_sdate},
+			#{org_contract_edate},
+			#{org_contract_sdate},
+			#{org_contract_edate}
+	    )	    	    
+	</insert>
+	
+	<update id="updates_seq" parameterType="com.mrs.Vo.BranchOffice_StoreVO">
+		update afd_branchinfo set s_sequence = '${s_sequence}' where b_id = '${b_id}'
+	</update>
+	
+	
+	<update id="updateBranchOffice_Store" parameterType="com.mrs.Vo.BranchOffice_StoreVO">
+	    UPDATE afd_StoreInfo set 
+	    	s_crn = #{s_crn},
+	    	s_name = #{s_name},
+	    	s_addr1 = #{s_addr1},
+	    	s_addr2 = #{s_addr2},
+	    	location_x = #{location_x},
+	    	location_y = #{location_y},
+	    	s_tel1 = #{s_tel1},
+	    	s_tel2 = #{s_tel2},
+	    	login_id = #{login_id},
+	    	<if test="login_passwd != '' and login_passwd != null">
+	    	login_passwd = SHA2(#{login_passwd}, 256),
+	    	</if>
+	    	active_status = #{active_status},
+	    	cook_time = #{cook_time},
+	    	terminal_type = #{terminal_type},
+	    	cid_id = #{cid_id},
+	    	cid_connect_status = #{cid_connect_status},
+	    	cid_port = #{cid_port},
+	    	printer_id = #{printer_id},
+	    	printer_connect_status = #{printer_connect_status},
+	    	printer_port = #{printer_port},
+	    	monthly_fee = #{monthly_fee},
+	    	basic_distance = #{basic_distance},
+	    	basic_charge = #{basic_charge},
+	    	add_distance = #{add_distance},
+	    	add_charge = #{add_charge},
+	    	service_type = #{service_type},
+	    	charge_method = #{charge_method},
+	    	rider_delay_duration = #{rider_delay_duration},
+	    	batch_extra_amount = #{batch_extra_amount},
+	    	last_recharge_amount = #{last_recharge_amount},
+	    	last_recharge_date = #{last_recharge_date},
+	    	charge_type = #{charge_type},
+	    	charge_option = #{charge_option},
+	    	credit_used_flag = #{credit_used_flag},
+	    	<!-- credit_member_id = #{credit_member_id}, -->
+	    	noti_flag = #{noti_flag},
+	    	noti_rider_assign = #{noti_rider_assign},
+	    	noti_card_pay = #{noti_card_pay},
+	    	open_time = #{open_time},
+	    	close_time = #{close_time},
+	    	monthly_order_count = #{monthly_order_count},
+	    	daily_order_count = #{daily_order_count},
+	    	credit_member_id = #{cat_id},
+	    	van_id = #{van_id},
+	    	<!-- 
+	    	v_bank = #{v_bank},
+	    	v_account = #{v_account},
+	    	v_name = #{v_name},
+	    	 -->
+	    	contract_sdate = #{contract_sdate},
+	    	contract_edate = #{contract_edate},
+	    	<!-- 
+	    	insert_date = #{insert_date},
+	    	 -->
+	    	service_start_date = #{service_start_date},
+	    	update_date = #{update_date},
+	    	<!-- 
+	    	r_op_id = #{r_op_id},
+	    	-->
+	    	u_op_id = #{u_op_id},
+	    	store_statement = #{store_statement},
+	    	kitchen_statement = #{kitchen_statement},
+	    	customer_statement = #{customer_statement},
+	    	s_representative = #{s_representative},
+	    	store_type = #{store_type},
+	    	s_addr_building = #{s_addr_building},
+	    	s_addr_num = #{s_addr_num},
+	    	s_addr_appendix = #{s_addr_appendix}
+	    	where s_id = #{s_id}
+	</update>
+	
+	<delete id="deleteBranchOffice_Store" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_StoreInfo	    
+	    WHERE	s_id = #{s_id}	    
+	</delete>
+	
+	<delete id="deleteafd_time_extra" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_time_extra	    
+	    WHERE	s_id = #{s_id}	    
+	</delete>
+	
+	<delete id="deleteafd_area_extra" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_area_extra	    
+	    WHERE	s_id = #{s_id}	    
+	</delete>
+	
+	<delete id="deleteafd_storecoverarea" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_storecoverarea	    
+	    WHERE	s_id = #{s_id}	    
+	</delete>
+	
+	<delete id="deleteafd_fixed_price" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_fixed_price	    
+	    WHERE	s_id = #{s_id}	    
+	</delete>
+	
+	<delete id="deleteafd_foodcategory" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_foodcategory	    
+	    WHERE	s_id = #{s_id}	    
+	</delete>
+	
+	<delete id="deleteafd_basemenu" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_basemenu	    
+	    WHERE	s_id = #{s_id}	    
+	</delete>
+	
+	<delete id="deletesessioninfo_s" parameterType="String">
+	    DELETE 	
+	    FROM afd_store_session_info where b_id = #{b_id} and s_id = #{s_id}	    
+	</delete>
+
+<!-- 지사 주소 관리 메뉴 -->
+   <select id="getMaxIdx_Addr" parameterType="com.mrs.Vo.BranchOffice_AddrVO" resultType="Integer">
+   	 select ifnull(MAX(idx),0)
+			from afd_Branch_Address
+   </select>
+   
+   <select id="getCityGu_Addr" parameterType="com.mrs.Vo.BranchOffice_AddrVO" resultType="com.mrs.Vo.BranchOffice_AddrVO">
+   	 select city_code, gu_code from afd_branchcoverarea 
+   	  WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND b_id LIKE '%${b_id}%'	
+	    </if>
+   </select>
+   
+   <!-- 
+   <select id="getBranchOfficeAddrList_bid" parameterType="com.mrs.Vo.BranchOffice_AddrVO" resultType="com.mrs.Vo.BranchOffice_AddrVO">
+      select a.b_id,
+      		b.b_name
+     		from afd_BranchCoverArea a
+     		left outer join afd_branchInfo b
+     		on a.b_id = b.b_id
+     		GROUP BY b_id
+     		order by b_id DESC
+   </select>
+    -->
+   <select id="getBranchOfficeAddrList_bid" parameterType="com.mrs.Vo.BranchOffice_AddrVO" resultType="com.mrs.Vo.BranchOffice_AddrVO">
+     select b_id, b_name from afd_branchInfo
+   </select>
+    <select id="getBranchOfficeAddrList_bidlist" parameterType="com.mrs.Vo.BranchOffice_AddrVO" resultType="com.mrs.Vo.BranchOffice_AddrVO">
+      select DISTINCT a.b_id, b.b_name 
+			from afd_Branch_Address a 
+			left outer join afd_branchinfo b on a.b_id = b.b_id
+   </select>
+   
+	<select id="getOfficeListAddr" parameterType="com.mrs.Vo.BranchOffice_AddrVO" resultType="com.mrs.Vo.BranchOffice_AddrVO">
+      select b_id,
+      		 idx,
+		     city_code,
+		     gu_code,
+		     town_code,
+		     dong_code,
+		     li_code,
+		     san_flag,
+		     ji_bonbun,
+		     ji_bubun,
+		     building_name,
+		     building_dongho,
+		     road_codenum,
+		     road_code,
+		     road_bonbun,
+		     road_bubun,
+		     full_addr,
+		     full_addr_road,
+		     location_x,
+		     location_y
+     		from afd_Branch_Address
+     		order by idx DESC
+   </select>
+   
+   <select id="getBranchOfficeAddrList" parameterType="com.mrs.Vo.BranchOffice_AddrVO" resultType="com.mrs.Vo.BranchOffice_AddrVO">
+	      SELECT a.b_id,
+	      		 a.idx,
+			     a.city_code,
+			     a.gu_code,
+			     a.town_code,
+			     a.dong_code,
+			     a.li_code,
+			     a.san_flag,
+			     a.ji_bonbun,
+			     a.ji_bubun,
+			     a.building_name,
+			     a.building_dongho,
+			     a.road_codenum,
+			     a.road_code,
+			     a.road_bonbun,
+			     a.road_bubun,
+			     a.full_addr,
+			     a.full_addr_road,
+			     a.location_x,
+			     a.location_y,
+			     b.b_name
+	    FROM	afd_Branch_Address a 
+	    left outer join afd_BranchInfo b 
+		on a.b_id = b.b_id
+		where 1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'
+	    </if>
+	    <if test="city_code != '' and city_code != null">
+	    	AND a.city_code LIKE '%${city_code}%'	
+	    </if>
+	    <if test="gu_code != '' and gu_code != null">
+	    	AND a.gu_code LIKE '%${gu_code}%'	
+	    </if>
+	    <if test="town_code != '' and town_code != null">
+	    	AND a.town_code LIKE '%${town_code}%'	
+	    </if>
+	    <if test="dong_code != '' and dong_code != null">
+	    	AND a.dong_code LIKE '%${dong_code}%'	
+	    </if>
+	    <if test="li_code != '' and li_code != null">
+	    	AND a.li_code LIKE '%${li_code}%'	
+	    </if>
+	    <if test="san_flag != '' and san_flag != null">
+	    	AND a.san_flag LIKE '%${san_flag}%'	
+	    </if>
+	    <if test="ji_bonbun != '' and ji_bonbun != null">
+	    	AND a.ji_bonbun LIKE '%${ji_bonbun}%'	
+	    </if>
+	    <if test="ji_bubun != '' and ji_bubun != null">
+	    	AND a.ji_bubun LIKE '%${ji_bubun}%'	
+	    </if>
+	    <if test="building_name != '' and building_name != null">
+	    	AND a.building_name LIKE '%${building_name}%'	
+	    </if>
+	    <if test="building_dongho != '' and building_dongho != null">
+	    	AND a.building_dongho LIKE '%${building_dongho}%'	
+	    </if>
+	    <if test="road_codenum != '' and road_codenum != null">
+	    	AND a.road_codenum LIKE '%${road_codenum}%'	
+	    </if>
+	    <if test="road_code != '' and road_code != null">
+	    	AND a.road_code LIKE '%${road_code}%'	
+	    </if>
+	    <if test="road_bonbun != '' and road_bonbun != null">
+	    	AND a.road_bonbun LIKE '%${road_bonbun}%'	
+	    </if>
+	    <if test="road_bubun != '' and road_bubun != null">
+	    	AND a.road_bubun LIKE '%${road_bubun}%'	
+	    </if>
+	    <if test="road_bubun != '' and road_bubun != null">
+	    	AND a.road_bubun LIKE '%${road_bubun}%'	
+	    </if>
+	     <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+	    ORDER BY a.idx DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+	
+	<select id="getBranchOfficeAddrList_cs" parameterType="com.mrs.Vo.BranchOffice_AddrVO" resultType="com.mrs.Vo.BranchOffice_AddrVO">
+	      SELECT b_id,
+	      		 idx,
+			     city_code,
+			     gu_code,
+			     town_code,
+			     dong_code,
+			     li_code,
+			     san_flag,
+			     ji_bonbun,
+			     ji_bubun,
+			     building_name,
+			     building_dongho,
+			     road_codenum,
+			     road_code,
+			     road_bonbun,
+			     road_bubun,
+			     full_addr,
+			     full_addr_road,
+			     location_x,
+			     location_y
+	    FROM	afd_Branch_Address
+	    WHERE	1=1
+	    	AND b_id = '${b_id}'	
+	    <if test="city_code != '' and city_code != null">
+	    	AND city_code LIKE '%${city_code}%'	
+	    </if>
+	    <if test="gu_code != '' and gu_code != null">
+	    	AND gu_code LIKE '%${gu_code}%'	
+	    </if>
+	    <if test="town_code != '' and town_code != null">
+	    	AND town_code LIKE '%${town_code}%'	
+	    </if>
+	    <if test="dong_code != '' and dong_code != null">
+	    	AND dong_code LIKE '%${dong_code}%'	
+	    </if>
+	    <if test="li_code != '' and li_code != null">
+	    	AND li_code LIKE '%${li_code}%'	
+	    </if>
+	    <if test="san_flag != '' and san_flag != null">
+	    	AND san_flag LIKE '%${san_flag}%'	
+	    </if>
+	    <if test="ji_bonbun != '' and ji_bonbun != null">
+	    	AND ji_bonbun LIKE '%${ji_bonbun}%'	
+	    </if>
+	    <if test="ji_bubun != '' and ji_bubun != null">
+	    	AND ji_bubun LIKE '%${ji_bubun}%'	
+	    </if>
+	    <if test="building_name != '' and building_name != null">
+	    	AND building_name LIKE '%${building_name}%'	
+	    </if>
+	    <if test="building_dongho != '' and building_dongho != null">
+	    	AND building_dongho LIKE '%${building_dongho}%'	
+	    </if>
+	    <if test="road_codenum != '' and road_codenum != null">
+	    	AND road_codenum LIKE '%${road_codenum}%'	
+	    </if>
+	    <if test="road_code != '' and road_code != null">
+	    	AND road_code LIKE '%${road_code}%'	
+	    </if>
+	    <if test="road_bonbun != '' and road_bonbun != null">
+	    	AND road_bonbun LIKE '%${road_bonbun}%'	
+	    </if>
+	    <if test="road_bubun != '' and road_bubun != null">
+	    	AND road_bubun LIKE '%${road_bubun}%'	
+	    </if>
+	    <if test="road_bubun != '' and road_bubun != null">
+	    	AND road_bubun LIKE '%${road_bubun}%'	
+	    </if>
+	    ORDER BY idx DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+   
+   <select id="getBranchOfficeAddrListCount" parameterType="com.mrs.Vo.BranchOffice_AddrVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_Branch_Address a 
+	    left outer join afd_BranchInfo b 
+	    on a.b_id = b.b_id
+	    where 1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="city_code != '' and city_code != null">
+	    	AND a.city_code LIKE '%${city_code}%'	
+	    </if>
+	    <if test="gu_code != '' and gu_code != null">
+	    	AND a.gu_code LIKE '%${gu_code}%'	
+	    </if>
+	    <if test="town_code != '' and town_code != null">
+	    	AND a.town_code LIKE '%${town_code}%'	
+	    </if>
+	    <if test="dong_code != '' and dong_code != null">
+	    	AND a.dong_code LIKE '%${dong_code}%'	
+	    </if>
+	    <if test="li_code != '' and li_code != null">
+	    	AND a.li_code LIKE '%${li_code}%'	
+	    </if>
+	    <if test="san_flag != '' and san_flag != null">
+	    	AND a.san_flag LIKE '%${san_flag}%'	
+	    </if>
+	    <if test="ji_bonbun != '' and ji_bonbun != null">
+	    	AND a.ji_bonbun LIKE '%${ji_bonbun}%'	
+	    </if>
+	    <if test="ji_bubun != '' and ji_bubun != null">
+	    	AND a.ji_bubun LIKE '%${ji_bubun}%'	
+	    </if>
+	    <if test="building_name != '' and building_name != null">
+	    	AND a.building_name LIKE '%${building_name}%'	
+	    </if>
+	    <if test="building_dongho != '' and building_dongho != null">
+	    	AND a.building_dongho LIKE '%${building_dongho}%'	
+	    </if>
+	    <if test="road_codenum != '' and road_codenum != null">
+	    	AND a.road_codenum LIKE '%${road_codenum}%'	
+	    </if>
+	    <if test="road_code != '' and road_code != null">
+	    	AND a.road_code LIKE '%${road_code}%'	
+	    </if>
+	    <if test="road_bonbun != '' and road_bonbun != null">
+	    	AND a.road_bonbun LIKE '%${road_bonbun}%'	
+	    </if>
+	    <if test="road_bubun != '' and road_bubun != null">
+	    	AND a.road_bubun LIKE '%${road_bubun}%'	
+	    </if>
+	    <if test="road_bubun != '' and road_bubun != null">
+	    	AND a.road_bubun LIKE '%${road_bubun}%'	
+	    </if>
+	     <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'
+	    </if>
+	</select>
+	
+	<select id="getBranchOfficeAddrListCount_cs" parameterType="com.mrs.Vo.BranchOffice_AddrVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_Branch_Address
+	    WHERE	1=1
+	    	AND b_id = '${b_id}'	
+	    <if test="city_code != '' and city_code != null">
+	    	AND city_code LIKE '%${city_code}%'	
+	    </if>
+	    <if test="gu_code != '' and gu_code != null">
+	    	AND gu_code LIKE '%${gu_code}%'	
+	    </if>
+	    <if test="town_code != '' and town_code != null">
+	    	AND town_code LIKE '%${town_code}%'	
+	    </if>
+	    <if test="dong_code != '' and dong_code != null">
+	    	AND dong_code LIKE '%${dong_code}%'	
+	    </if>
+	    <if test="li_code != '' and li_code != null">
+	    	AND li_code LIKE '%${li_code}%'	
+	    </if>
+	    <if test="san_flag != '' and san_flag != null">
+	    	AND san_flag LIKE '%${san_flag}%'	
+	    </if>
+	    <if test="ji_bonbun != '' and ji_bonbun != null">
+	    	AND ji_bonbun LIKE '%${ji_bonbun}%'	
+	    </if>
+	    <if test="ji_bubun != '' and ji_bubun != null">
+	    	AND ji_bubun LIKE '%${ji_bubun}%'	
+	    </if>
+	    <if test="building_name != '' and building_name != null">
+	    	AND building_name LIKE '%${building_name}%'	
+	    </if>
+	    <if test="building_dongho != '' and building_dongho != null">
+	    	AND building_dongho LIKE '%${building_dongho}%'	
+	    </if>
+	    <if test="road_codenum != '' and road_codenum != null">
+	    	AND road_codenum LIKE '%${road_codenum}%'	
+	    </if>
+	    <if test="road_code != '' and road_code != null">
+	    	AND road_code LIKE '%${road_code}%'	
+	    </if>
+	    <if test="road_bonbun != '' and road_bonbun != null">
+	    	AND road_bonbun LIKE '%${road_bonbun}%'	
+	    </if>
+	    <if test="road_bubun != '' and road_bubun != null">
+	    	AND road_bubun LIKE '%${road_bubun}%'	
+	    </if>
+	    <if test="road_bubun != '' and road_bubun != null">
+	    	AND road_bubun LIKE '%${road_bubun}%'	
+	    </if>
+	</select>
+	
+	<insert id="insertBranchOffice_addr" parameterType="com.mrs.Vo.BranchOffice_AddrVO">
+	    INSERT 	INTO afd_Branch_Address 
+	    (
+	     b_id,
+	     idx,
+	     city_code,
+	     gu_code,
+	     town_code,
+	     dong_code,
+	     li_code,
+	     san_flag,
+	     ji_bonbun,
+	     ji_bubun,
+	     building_name,
+	     building_dongho,
+	     road_codenum,
+	     road_code,
+	     road_bonbun,
+	     road_bubun,
+	     full_addr,
+	     full_addr_road,
+	     location_x,
+	     location_y
+	    )
+	    VALUES
+	    (
+	    #{b_id},
+	    #{idx}+1,
+	    #{city_code},
+	    #{gu_code},
+	    #{town_code},
+	    #{dong_code},
+	    #{li_code},
+	    #{san_flag},
+	    #{ji_bonbun},
+	    #{ji_bubun},
+	    #{building_name},
+	    #{building_dongho},
+	    #{road_codenum},
+	    #{road_code},
+	    #{road_bonbun},
+	    #{road_bubun},
+	    #{full_addr},
+	    #{full_addr_road},
+	    #{location_x},
+	    #{location_y}
+	    )	    	    
+	</insert>
+	
+	<update id="updateBranchOffice_addr" parameterType="com.mrs.Vo.BranchOffice_AddrVO">
+	    UPDATE afd_Branch_Address set 
+	  	 city_code = #{city_code},
+	     gu_code = #{gu_code},
+	     town_code = #{town_code},
+	     dong_code = #{dong_code},
+	     li_code = #{li_code},
+	     san_flag = #{san_flag},
+	     ji_bonbun = #{ji_bonbun},
+	     ji_bubun = #{ji_bubun},
+	     building_name = #{building_name},
+	     building_dongho = #{building_dongho},
+	     road_codenum = #{road_codenum},
+	     road_code = #{road_code},
+	     road_bonbun = #{road_bonbun},
+	     road_bubun = #{road_bubun},
+	     full_addr = #{full_addr},
+	     full_addr_road = #{full_addr_road},
+	     location_x = #{location_x},
+	     location_y = #{location_y}
+	    where idx = #{idx}
+	</update>
+	
+	<delete id="deleteBranchOffice_addr" parameterType="com.mrs.Vo.BranchOffice_AddrVO">
+	    DELETE 	
+	    FROM 	afd_Branch_Address	    
+	    WHERE	b_id = #{b_id}
+	    AND     idx = #{idx}  
+	</delete>
+	
+	<delete id="ck_deleteBranchOffice_addr" parameterType="com.mrs.Vo.BranchOffice_AddrVO">
+	    DELETE 	
+	    FROM 	afd_Branch_Address	    
+	    WHERE	b_id = #{b_id}
+	    AND     idx = #{idx}	
+	</delete>
+	
+
+
+   
+  <insert id="insertbranchoffice_addr_Batch" parameterType="com.mrs.Vo.BranchOffice_Store_CsvVO">
+	   INSERT into afd_storeinfo
+		(
+			b_id, s_id, s_name,  active_status, s_tel1, 
+			s_tel2, s_balance,  cook_time,  s_addr1,  s_addr2, 
+			s_addr_building,  s_addr_num, s_addr_appendix,  s_crn,  login_id,  
+			login_passwd, contract_sdate,  contract_edate, service_start_date,  open_time, 
+			close_time, noti_flag,  noti_rider_assign,  noti_card_pay, service_type, 
+			charge_type, charge_method,  charge_option, cid_id,  cid_port,  
+			printer_id, printer_port, cat_id,  
+			van_id, v_bank,  v_account, v_name,  basic_distance, 
+			basic_charge, add_distance, add_charge,  s_representative,  monthly_option, 
+            monthly_charge
+            )
+			values
+			(
+			#{b_id},#{s_id}, #{s_name},  #{active_status},  #{s_tel1}, 
+			#{s_tel2}, #{s_balance},  #{cook_time},  #{s_addr1}, #{s_addr2}, 
+			#{s_addr_building}, #{s_addr_num},#{s_addr_appendix}, #{s_crn}, #{login_id},
+			#{login_passwd}, #{contract_sdate}, #{contract_edate}, #{service_start_date},  #{open_time}, 
+			#{close_time}, #{noti_flag}, #{noti_rider_assign}, #{noti_card_pay},#{service_type}, 
+			#{charge_type},#{charge_method}, #{charge_option},  #{cid_id}, #{cid_port},
+			#{printer_id}, #{printer_port}, #{cat_id},  
+			#{van_id}, #{v_bank}, #{v_account}, #{v_name},  #{basic_distance}, 
+			#{basic_charge}, #{add_distance}, #{add_charge},  #{s_representative},  #{monthly_option},  
+			#{monthly_charge}
+            )
+         </insert>
+         
+   <select id="getBranchOfficeList_config" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="com.mrs.Vo.BranchOfficeVO">
+      select  h_name FROM afd_Config
+   </select>
+ 
+   
+   <!-- 기사정보관리 -->
+   <select id="getBranchOffice_riderList" parameterType="com.mrs.Vo.BranchOffice_RiderVO" resultType="com.mrs.Vo.BranchOffice_RiderVO">
+	 SELECT b_id,
+	 		r_id,
+	 		r_type,
+	 		s_id,
+	 		r_crn,
+	 		convert(AES_DECRYPT(UNHEX(from_base64(r_name)), 'mrs_delivery!@#$')using UTF8) as r_name,
+	 		r_address,
+	 		convert(AES_DECRYPT(UNHEX(from_base64(location_x)), 'mrs_delivery!@#$')using UTF8) as location_x,
+	 		convert(AES_DECRYPT(UNHEX(from_base64(location_y)), 'mrs_delivery!@#$')using UTF8) as location_y,
+	 		last_location_update,
+	 		convert(AES_DECRYPT(UNHEX(from_base64(r_tel1)), 'mrs_delivery!@#$')using UTF8) as r_tel1,
+	 		login_id, 
+	 		login_passwd,
+	 		active_status,
+	 		r_balance,
+	 		card_keep_flag,
+	 		card_id,
+	 		max_call,
+	 		current_call,
+	 		callcatch_penalty_status,
+	 		callcatch_penalty_value,
+	 		calculate_peroid,
+	 		contract_sdate,
+	 		contract_edate,
+	 		insert_date,
+	 		service_start_date,
+	 		update_date,
+	 		r_op_id,
+	 		u_op_id,
+	 		r_city_code,
+	 		r_gu_code,
+	 		r_dong_code,
+	 		r_town_code
+	    FROM	afd_RiderInfo
+	    WHERE	1=1
+	    <if test="r_id != '' and r_id != null">
+	    	AND r_id LIKE '%${r_id}%'	
+	    </if>
+	     <if test="r_name != '' and r_name != null">
+	    	AND r_name = to_base64(HEX(AES_ENCRYPT(#{r_name}, 'mrs_delivery!@#$')))	
+	    </if>
+	    ORDER BY r_id DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+   
+   <select id="getBranchOffice_riderListCount" parameterType="com.mrs.Vo.BranchOffice_RiderVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_RiderInfo
+	    WHERE	1=1
+	    <if test="r_name != '' and r_name != null">
+	    	AND r_name = to_base64(HEX(AES_ENCRYPT(#{r_name}, 'mrs_delivery!@#$')))	
+	    </if>
+	     <if test="r_id != '' and r_id != null">
+	    	AND r_id LIKE '%${r_id}%'	
+	    </if>
+	</select>
+	
+	<insert id="insertbranchoffice_rider" parameterType="com.mrs.Vo.BranchOffice_RiderVO">
+	    INSERT 	INTO afd_riderInfo (
+	   		b_id,
+	   		r_id,
+	   		r_type,
+	   		r_name,
+	   		r_crn,
+	   		r_tel1,
+	   		max_call,
+	   		login_id,
+	   		login_passwd,
+	   		r_city_code,
+	   		r_gu_code,
+	   		r_town_code,
+	   		r_dong_code,
+	   		contract_sdate,
+	   		contract_edate,
+	   		insert_date,
+	   		update_date,
+	   		active_status,
+	   		card_keep_flag,
+	   		card_id,
+	   		callcatch_penalty_value,
+	   		service_start_date,
+	   		r_address,
+	   		r_addr_appendix,
+	   		location_x,
+	   		location_y
+	    )
+	    VALUES	(
+	   		#{b_id},
+	   		#{r_id},
+	   		#{r_type},
+	   		to_base64(HEX(AES_ENCRYPT(#{r_name}, 'mrs_delivery!@#$'))),
+	   		#{r_crn},
+	   		to_base64(HEX(AES_ENCRYPT(#{r_tel1}, 'mrs_delivery!@#$'))),
+	   		#{max_call},
+	   		#{login_id},
+	    	login_passwd = SHA2(#{login_passwd}, 256),
+	   		#{r_city_code},
+	   		#{r_gu_code},
+	   		#{r_town_code},
+	   		#{r_dong_code},
+	   		#{contract_sdate},
+	   		#{contract_edate},
+	   		#{insert_date},
+	   		#{update_date},
+	   		#{active_status},
+	   		#{card_keep_flag},
+	   		#{card_id},
+	   		#{callcatch_penalty_value},
+	   		#{service_start_date},
+	   		#{r_address},
+	   		#{r_addr_appendix},
+	   		to_base64(HEX(AES_ENCRYPT(#{location_x}, 'mrs_delivery!@#$'))),
+	   		to_base64(HEX(AES_ENCRYPT(#{location_y}, 'mrs_delivery!@#$')))
+	    )	    	    
+	</insert>
+	<select id="getR_seq2" parameterType="com.mrs.Vo.BranchOffice_RiderVO" resultType="Integer">
+   	 select ifnull(MAX(r_sequence),0) from afd_branchinfo
+   </select>
+   
+    <select id="getR_seq" parameterType="com.mrs.Vo.BranchOffice_RiderVO" resultType="String">
+   	 	select ifnull(MAX(r_sequence),0) from afd_branchinfo
+   </select>
+   
+   <update id="updateR_seq" parameterType="com.mrs.Vo.BranchOffice_RiderVO">
+	    UPDATE afd_branchinfo set 
+	    	r_sequence = #{b_seq}+1
+	    	where r_sequence = #{b_seq}
+	</update>
+	
+	<delete id="deleteBranchOffice_rider" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_riderInfo	    
+	    where r_id = #{r_id}	    
+	</delete>
+	
+	<update id="updateBranchOffice_Rider" parameterType="com.mrs.Vo.BranchOffice_RiderVO">
+	    UPDATE afd_RiderInfo set 
+	    	b_id = #{b_id},
+	    	r_name = to_base64(HEX(AES_ENCRYPT(#{r_name}, 'mrs_delivery!@#$'))),
+	    	r_type = #{r_type},
+	    	r_crn = #{r_crn},
+	    	r_tel1 = to_base64(HEX(AES_ENCRYPT(#{r_tel1}, 'mrs_delivery!@#$'))),
+	    	max_call = #{max_call},
+	    	login_id = #{login_id},
+	    	<if test="login_passwd != '' and login_passwd != null">
+	    	login_passwd = SHA2(#{login_passwd}, 256),
+	    	</if>
+	    	r_address = #{r_address},
+	    	location_x = to_base64(HEX(AES_ENCRYPT(#{location_x}, 'mrs_delivery!@#$'))),
+	    	location_y = to_base64(HEX(AES_ENCRYPT(#{location_y}, 'mrs_delivery!@#$'))),
+	    	r_addr_appendix = #{r_addr_appendix},
+	    	contract_edate = #{contract_edate},
+	    	active_status = #{active_status},
+	    	card_keep_flag = #{card_keep_flag},
+	    	card_id = #{card_id},
+	    	callcatch_penalty_value = #{callcatch_penalty_value},
+	    	r_city_code = #{r_city_code},
+	    	r_gu_code = #{r_gu_code},
+	    	r_dong_code = #{r_dong_code},
+	    	r_town_code = #{r_town_code}
+	    	where r_id = #{r_id}
+	</update>
+	
+	<select id="getCity_code" parameterType="com.mrs.Vo.BranchOffice_RiderVO" resultType="String">
+		SELECT OUT_CITYCODE from afd_Convert_CityCode where in_citycode like '%${r_city_code}%' limit 1
+	</select>
+	
+	<select id="getB_City_code" parameterType="com.mrs.Vo.BranchOfficeVO" resultType="String">
+		SELECT OUT_CITYCODE from afd_Convert_CityCode where in_citycode like '%${b_city_code}%' limit 1
+	</select>
+	
+	<select id="getCity_code2" parameterType="com.mrs.Vo.BranchOffice_AddrVO" resultType="String">
+		SELECT OUT_CITYCODE from afd_Convert_CityCode where in_citycode like '%${city_code}%' limit 1
+	</select>
+	
+	<insert id="insertsessioninfo_rider" parameterType="com.mrs.Vo.BranchOffice_RiderVO">
+	    INSERT 	INTO afd_rider_session_info (b_id, r_id) VALUES (#{b_id}, #{r_id})	    	    
+	</insert>
+</mapper>

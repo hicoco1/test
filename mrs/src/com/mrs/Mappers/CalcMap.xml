@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Calc">
+<!-- 지사 정산 -->
+   <select id="getBranchList" parameterType="com.mrs.Vo.Calc_BranchVO" resultType="com.mrs.Vo.Calc_BranchVO">
+	    SELECT	a.b_id,
+				a.calculate_sdate,
+				a.calculate_edate,
+				a.total_count,
+				a.succ_count,
+				a.fail_count,
+				a.calculate_amount,
+				a.solution_amount,
+				a.calculate_opid,
+				a.payment_flag,
+				b.calculatepercall,
+				b.b_name
+				FROM afd_Calc_Branch a LEFT OUTER JOIN afd_BranchInfo b 
+				ON a.b_id = b.b_id
+				WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+			AND a.calculate_sdate <![CDATA[ >= ]]> concat('${calculate_sdate}',"060000") AND a.calculate_edate <![CDATA[ <= ]]> concat('${calculate_edate}',"055959")
+
+	    ORDER BY a.calculate_sdate DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+	
+	<select id="getBranchList_all" parameterType="com.mrs.Vo.Calc_BranchVO" resultType="com.mrs.Vo.Calc_BranchVO">
+	    SELECT	a.b_id,
+				a.calculate_sdate,
+				a.calculate_edate,
+				IFNULL(sum(a.total_count),'0') as total_cnt, 
+				IFNULL(sum(a.succ_count),'0') as succ_cnt, 
+				IFNULL(sum(a.fail_count),'0') as fail_cnt, 
+				IFNULL(sum(a.calculate_amount),'0') as calculate_amount_all,
+				IFNULL(sum(b.calculatepercall),'0') as calculatepercall_all,  
+				IFNULL(sum(a.solution_amount),'0') as solution_amount_all, 
+				a.calculate_opid,
+				a.payment_flag,
+				b.b_name
+				FROM afd_Calc_Branch a LEFT OUTER JOIN afd_BranchInfo b 
+				ON a.b_id = b.b_id
+				WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+		AND a.calculate_sdate <![CDATA[ >= ]]> concat('${calculate_sdate}',"060000") AND a.calculate_edate <![CDATA[ <= ]]> concat('${calculate_edate}',"055959")
+		
+	    ORDER BY a.calculate_sdate DESC
+	</select>
+	
+   <select id="getBranchListCount" parameterType="com.mrs.Vo.Calc_BranchVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_Calc_Branch a 
+	    left outer join afd_BranchInfo b
+	    on a.b_id = b.b_id
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+		AND a.calculate_sdate <![CDATA[ >= ]]> concat('${calculate_sdate}',"060000") AND a.calculate_edate <![CDATA[ <= ]]> concat('${calculate_edate}',"055959")
+
+	</select>
+	
+<!-- 가맹점 정산 -->
+   <select id="getStoreList" parameterType="com.mrs.Vo.Calc_StoreVO" resultType="com.mrs.Vo.Calc_StoreVO">
+	    SELECT	
+			a.b_id,
+	    	a.s_id,
+			a.order_date,
+			a.monthly_option,
+			a.total_count,
+			a.succ_count,
+			a.fail_count,
+			a.monthly_charge,
+			a.total_fees,
+			b.b_name,
+			b.calculatepercall,
+			c.s_name
+			FROM (afd_Store_Fees_History a LEFT OUTER JOIN afd_BranchInfo b ON a.b_id = b.b_id)
+			left outer join afd_storeinfo c on a.s_id = c.s_id
+			where 1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'	
+	    </if>
+	    <if test="s_name != '' and s_name != null">
+	    	AND c.s_name LIKE '%${s_name}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+		AND a.order_date <![CDATA[ >= ]]> concat('${calculate_sdate}',"060000") AND a.order_date <![CDATA[ <= ]]> concat('${calculate_edate}',"055959")
+
+	    ORDER BY a.order_date DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+	
+	<select id="getStoreList_all" parameterType="com.mrs.Vo.Calc_StoreVO" resultType="com.mrs.Vo.Calc_StoreVO">
+	    SELECT	a.b_id,
+	    		a.s_id,
+				a.order_date,
+				a.monthly_option,
+				a.total_count,
+				a.succ_count,
+				a.fail_count,
+				a.monthly_charge,
+				a.total_fees,
+				IFNULL(sum(a.total_count),'0') as total_cnt,
+				IFNULL(sum(a.succ_count),'0') as succ_cnt, 
+				IFNULL(sum(a.fail_count),'0') as fail_cnt, 
+				IFNULL(sum(a.monthly_charge),'0') as monthly_charge_all,
+				IFNULL(sum(a.total_fees),'0') as total_fees_all,
+				IFNULL(sum(b.calculatepercall),'0') as calculatepercall_all,  
+				b.b_name,
+				b.calculatepercall,
+				c.s_name
+				FROM (afd_Store_Fees_History a LEFT OUTER JOIN afd_BranchInfo b ON a.b_id = b.b_id)
+				left outer join afd_storeinfo c on a.s_id = c.s_id
+				where 1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'	
+	    </if>
+	    <if test="s_name != '' and s_name != null">
+	    	AND c.s_name LIKE '%${s_name}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+
+
+		AND a.order_date <![CDATA[ >= ]]> concat('${calculate_sdate}',"060000") AND a.order_date <![CDATA[ <= ]]> concat('${calculate_edate}',"055959")
+		
+	    ORDER BY a.order_date DESC
+	</select>
+   
+   <select id="getStoreListCount" parameterType="com.mrs.Vo.Calc_StoreVO" resultType="Integer">
+	    SELECT	COUNT(*) 
+	    FROM (afd_Store_Fees_History a LEFT OUTER JOIN afd_BranchInfo b ON a.b_id = b.b_id)
+		left outer join afd_storeinfo c on a.s_id = c.s_id
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'	
+	    </if>
+	    <if test="s_name != '' and s_name != null">
+	    	AND c.s_name LIKE '%${s_name}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+
+
+		AND a.order_date <![CDATA[ >= ]]> concat('${calculate_sdate}',"060000") AND a.order_date <![CDATA[ <= ]]> concat('${calculate_edate}',"055959")
+	
+	</select>
+	
+	<!-- 배달기사 정산 -->
+   <select id="getRiderList" parameterType="com.mrs.Vo.Calc_RiderVO" resultType="com.mrs.Vo.Calc_RiderVO">
+	    SELECT	a.b_id,
+	    		a.r_id,
+				a.calculate_sdate,
+				a.calculate_edate,
+				a.total_count,
+				a.succ_count,
+				a.fail_count,
+				a.calculate_amount,
+				a.calculate_opid,
+				a.payment_flag,
+				b.b_name,
+				convert(AES_DECRYPT(UNHEX(from_base64(c.r_name)), 'mrs_delivery!@#$')using UTF8) as r_name
+				FROM (afd_Calc_Rider a LEFT OUTER JOIN afd_BranchInfo b ON a.b_id = b.b_id)
+				left outer join afd_riderinfo c on a.r_id = c.r_id
+				WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="r_id != '' and r_id != null">
+	    	AND a.r_id LIKE '%${r_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+	    <if test="r_name != '' and r_name != null">
+	    	AND AES_DECRYPT(UNHEX(from_base64(c.r_name)), 'mrs_delivery!@#$') LIKE '%${r_name}%'
+	    </if>
+
+		AND a.calculate_sdate <![CDATA[ >= ]]> concat('${calculate_sdate}',"060000") AND a.calculate_edate <![CDATA[ <= ]]> concat('${calculate_edate}',"055959")
+
+	    ORDER BY a.calculate_sdate DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+	
+	<select id="getRiderList_all" parameterType="com.mrs.Vo.Calc_RiderVO" resultType="com.mrs.Vo.Calc_RiderVO">
+	    SELECT	a.b_id,
+	    		a.r_id,
+				a.calculate_sdate,
+				a.calculate_edate,
+				IFNULL(sum(a.total_count),'0') as total_cnt, 
+				IFNULL(sum(a.succ_count),'0') as succ_cnt, 
+				IFNULL(sum(a.fail_count),'0') as fail_cnt, 
+				IFNULL(sum(a.calculate_amount),'0') as calculate_amount_all, 
+				a.calculate_opid,
+				a.payment_flag,
+				b.b_name,
+				convert(AES_DECRYPT(UNHEX(from_base64(c.r_name)), 'mrs_delivery!@#$')using UTF8) as r_name
+				FROM (afd_Calc_Rider a LEFT OUTER JOIN afd_BranchInfo b ON a.b_id = b.b_id)
+				left outer join afd_riderinfo c on a.r_id = c.r_id
+				WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="r_id != '' and r_id != null">
+	    	AND a.r_id LIKE '%${r_id}%'	
+	    </if>
+	    <if test="r_name != '' and r_name != null">
+	    	AND AES_DECRYPT(UNHEX(from_base64(c.r_name)), 'mrs_delivery!@#$') LIKE '%${r_name}%'
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+
+		AND a.calculate_sdate <![CDATA[ >= ]]> concat('${calculate_sdate}',"060000") AND a.calculate_edate <![CDATA[ <= ]]> concat('${calculate_edate}',"055959")
+
+	    ORDER BY a.calculate_sdate DESC
+	</select>
+   
+   <select id="getRiderListCount" parameterType="com.mrs.Vo.Calc_RiderVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM (afd_Calc_Rider a LEFT OUTER JOIN afd_BranchInfo b ON a.b_id = b.b_id)
+		left outer join afd_riderinfo c on a.r_id = c.r_id
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="r_id != '' and r_id != null">
+	    	AND a.r_id LIKE '%${r_id}%'	
+	    </if>
+	    <if test="r_name != '' and r_name != null">
+	    	AND AES_DECRYPT(UNHEX(from_base64(c.r_name)), 'mrs_delivery!@#$') LIKE '%${r_name}%'
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+	    
+
+		AND a.calculate_sdate <![CDATA[ >= ]]> concat('${calculate_sdate}',"060000") AND a.calculate_edate <![CDATA[ <= ]]> concat('${calculate_edate}',"055959")
+	
+	</select>
+	
+	<!-- 상점 별 배달기사 정산 -->
+  <select id="getStoreRiderList" parameterType="com.mrs.Vo.Calc_StoreRiderVO" resultType="com.mrs.Vo.Calc_StoreRiderVO">
+	    SELECT	a.b_id,
+			    b.b_name,
+			    a.s_id,
+			    a.calculate_sdate,
+			    a.calculate_edate,
+			    a.total_count,
+			    a.succ_count,
+			    a.fail_count,
+			    a.calculate_amount,
+			    a.calculate_opid,
+			    c.s_name
+	    FROM (afd_calc_store a LEFT OUTER JOIN afd_BranchInfo b ON a.b_id = b.b_id)
+	    		left outer join afd_storeinfo c on a.s_id = c.s_id
+				WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'	
+	    </if>
+	    <if test="r_id != '' and r_id != null">
+	    	AND a.r_id LIKE '%${r_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+
+
+		AND a.calculate_sdate <![CDATA[ >= ]]> concat('${calculate_sdate}',"060000") AND a.calculate_edate <![CDATA[ <= ]]> concat('${calculate_edate}',"055959")
+
+	    ORDER BY calculate_sdate DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+	
+	
+	 <select id="getStoreRiderList_all" parameterType="com.mrs.Vo.Calc_StoreRiderVO" resultType="com.mrs.Vo.Calc_StoreRiderVO">
+	    SELECT	a.b_id,
+			    b.b_name,
+			    a.s_id,
+			    a.calculate_sdate,
+			    a.calculate_edate,
+			    IFNULL(sum(a.total_count),'0') as total_cnt, 
+				IFNULL(sum(a.succ_count),'0') as succ_cnt, 
+				IFNULL(sum(a.fail_count),'0') as fail_cnt, 
+				IFNULL(sum(a.calculate_amount),'0') as calculate_amount_all, 
+			    a.calculate_opid,
+ 			    c.s_name
+	    		FROM (afd_calc_store a LEFT OUTER JOIN afd_BranchInfo b ON a.b_id = b.b_id)
+	    		left outer join afd_storeinfo c on a.s_id = c.s_id
+				WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'	
+	    </if>
+	    <if test="r_id != '' and r_id != null">
+	    	AND a.r_id LIKE '%${r_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+
+		AND a.calculate_sdate <![CDATA[ >= ]]> concat('${calculate_sdate}',"060000") AND a.calculate_edate <![CDATA[ <= ]]> concat('${calculate_edate}',"055959")
+
+	    ORDER BY calculate_sdate DESC
+	</select>
+   
+   <select id="getStoreRiderListCount" parameterType="com.mrs.Vo.Calc_StoreRiderVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM (afd_calc_store a LEFT OUTER JOIN afd_BranchInfo b ON a.b_id = b.b_id)
+	    left outer join afd_storeinfo c on a.s_id = c.s_id
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'	
+	    </if>
+	    <if test="r_id != '' and r_id != null">
+	    	AND a.r_id LIKE '%${r_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+
+		AND a.calculate_sdate <![CDATA[ >= ]]> concat('${calculate_sdate}',"060000") AND a.calculate_edate <![CDATA[ <= ]]> concat('${calculate_edate}',"055959")
+
+	</select>
+	
+	<!-- 솔루션사 정산 -->
+   <select id="getSoluList" parameterType="com.mrs.Vo.Calc_SoluVO" resultType="com.mrs.Vo.Calc_SoluVO">
+	    SELECT	calculate_sdate,
+				calculate_edate,
+				total_count,
+				succ_count,
+				fail_count,
+				calculate_base_amount,
+				calculate_amount,
+				calculate_opid
+				FROM afd_Calc_Solution 
+				WHERE	1=1
+				<choose>
+			    	<when test ="calculate_sdate != '' and calculate_sdate != null and calculate_edate != '' and calculate_edate != null">
+			    		AND calculate_sdate <![CDATA[ >= ]]> concat('${calculate_sdate}',"060000") AND calculate_edate <![CDATA[ <= ]]> concat('${calculate_edate}',"055959")
+			   		</when>
+			   		<otherwise>
+			   			AND calculate_sdate <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND calculate_edate <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			  		</otherwise>
+			    </choose>
+	    		ORDER BY calculate_sdate DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+	
+	<select id="getSoluList_all" parameterType="com.mrs.Vo.Calc_SoluVO" resultType="com.mrs.Vo.Calc_SoluVO">
+	    SELECT	calculate_sdate,
+				calculate_edate,
+				IFNULL(sum(total_count),'0') as total_cnt, 
+				IFNULL(sum(succ_count),'0') as succ_cnt, 
+				IFNULL(sum(fail_count),'0') as fail_cnt,
+				IFNULL(sum(calculate_base_amount),'0') as calculate_base_amount_all, 
+				IFNULL(sum(calculate_amount),'0') as calculate_amount_all, 
+				calculate_opid
+				FROM afd_Calc_Solution 
+				WHERE	1=1
+				<choose>
+			    	<when test ="calculate_sdate != '' and calculate_sdate != null and calculate_edate != '' and calculate_edate != null">
+			    		AND calculate_sdate <![CDATA[ >= ]]> concat('${calculate_sdate}',"060000") AND calculate_edate <![CDATA[ <= ]]> concat('${calculate_edate}',"055959")
+			   		</when>
+			   		<otherwise>
+			   			AND calculate_sdate <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND calculate_edate <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			  		</otherwise>
+			    </choose>
+	    		ORDER BY calculate_sdate DESC
+	</select>
+   
+   <select id="getSoluListCount" parameterType="com.mrs.Vo.Calc_SoluVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_Calc_Solution 
+	    WHERE	1=1
+	    <choose>
+			<when test ="calculate_sdate != '' and calculate_sdate != null and calculate_edate != '' and calculate_edate != null">
+			    AND calculate_sdate <![CDATA[ >= ]]> concat('${calculate_sdate}',"060000") AND calculate_edate <![CDATA[ <= ]]> concat('${calculate_edate}',"055959")
+			</when>
+			<otherwise>
+			   	AND calculate_sdate <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND calculate_edate <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

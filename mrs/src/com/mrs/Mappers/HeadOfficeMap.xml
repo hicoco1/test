@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="HeadOffice">
+   <select id="getOfficeList" parameterType="com.mrs.Vo.HeadOfficeVO" resultType="com.mrs.Vo.HeadOfficeVO">
+     select login_passwd,
+     		login_id, 
+     		enabled from afd_UserInfo
+     		order by login_id DESC
+   </select>
+   
+   
+   
+   <select id="getHeadOfficeUpdate" parameterType="com.mrs.Vo.HeadOfficeVO" resultType="com.mrs.Vo.HeadOfficeVO">
+	    SELECT	a.user_role_id as usr_role_id, 
+	    		b.login_id as login_id, 
+	    		a.authority as authority, 
+	    		b.enabled as enabled,
+	    		b.e_mail as e_mail,
+	    		b.address as address,
+	    		b.tel1 as tel1,
+	    		b.tel2 as tel2,
+	    		b.position as position,
+	    		b.department as department
+	    FROM	afd_userinfo_authority a  LEFT OUTER JOIN afd_userinfo b ON a.login_id = b.login_id
+	    WHERE	b.login_id = '${login_id}'
+	    <include refid="Paging.mysql"/>
+	</select>
+   
+   
+   
+   <select id="getHeadOfficeList" parameterType="com.mrs.Vo.HeadOfficeVO" resultType="com.mrs.Vo.HeadOfficeVO">
+	    SELECT	a.user_role_id as usr_role_id, 
+	    		b.login_id as login_id, 
+	    		a.authority as authority, 
+	    		b.enabled as enabled,
+	    		b.e_mail as e_mail,
+	    		b.address as address,
+	    		b.tel1 as tel1,
+	    		b.tel2 as tel2,
+	    		b.position as position,
+	    		b.department as department
+	    FROM	afd_userinfo_authority a  LEFT OUTER JOIN afd_userinfo b ON a.login_id = b.login_id
+	    WHERE	1=1
+	    <if test="login_id != '' and login_id != null">
+	    	AND b.login_id LIKE '%${login_id}%'	
+	    </if>
+	    <if test="authority != '' and authority != null">
+	    	AND a.authority LIKE '%${authority}%'	
+	    </if>
+	    <if test="enabled != '' and enabled != null">
+	    	AND b.enabled LIKE '%${enabled}%'	
+	    </if>
+	    ORDER BY login_id DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+   
+   <select id="getHeadOfficeListCount" parameterType="com.mrs.Vo.HeadOfficeVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_userinfo_authority a  LEFT OUTER JOIN afd_userinfo b ON a.login_id = b.login_id
+	    WHERE	1=1
+	    <if test="login_id != '' and login_id != null">
+	    	AND b.login_id LIKE '%${login_id}%'	
+	    </if>
+	    <if test="authority != '' and authority != null">
+	    	AND a.authority LIKE '%${authority}%'	
+	    </if>
+	    <if test="enabled != '' and enabled != null">
+	    	AND b.enabled LIKE '%${enabled}%'	
+	    </if>
+	</select>
+	
+	<insert id="insertHeadOffice" parameterType="com.mrs.Vo.HeadOfficeVO">
+	    INSERT 	INTO afd_userinfo (login_id,login_passwd,enabled,e_mail,address,tel1,tel2,position,department)
+	    VALUES	(#{login_id},#{login_passwd},#{enabled},#{e_mail},#{address},#{tel1},#{tel2},#{position},#{department})	    	    
+	</insert>
+	<insert id="insertHeadOffice_authority" parameterType="com.mrs.Vo.HeadOfficeVO">
+	    INSERT 	INTO afd_userinfo_authority (login_id,authority)
+	    VALUES	(#{login_id},#{authority})	    	    
+	</insert>
+	
+	<update id="updateHeadOffice" parameterType="com.mrs.Vo.HeadOfficeVO">
+	    UPDATE afd_userinfo set 
+	    <if test="login_passwd != '' and login_passwd != null">
+	    	 login_passwd= #{login_passwd},
+	    </if>
+	    	 enabled = #{enabled},
+	    	 e_mail = #{e_mail},
+	    	 address = #{address},
+	    	 tel1 = #{tel1},
+	    	 tel2 = #{tel2},
+	    	 position = #{position},
+	    	 department = #{department}
+	    	 where login_id = #{login_id}
+	</update>
+	<update id="updateHeadOffice_authority" parameterType="com.mrs.Vo.HeadOfficeVO">
+	    UPDATE afd_userinfo_authority set authority= #{authority} where login_id = #{login_id}
+	</update>
+	
+	<delete id="deleteHeadOffice" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_userinfo	    
+	    WHERE	login_id = #{login_id}	    
+	</delete>
+	<delete id="deleteHeadOffice_authority" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_userinfo_authority	    
+	    WHERE	login_id = #{login_id}	    
+	</delete>
+	
+	<!-- 전국 주소 정보 메뉴 -->
+	<select id="getOfficeListAddr" parameterType="com.mrs.Vo.HeadOffice_AddrVO" resultType="com.mrs.Vo.HeadOffice_AddrVO">
+      select seq,
+		     city_code,
+		     gu_code,
+		     town_code,
+		     dong_code,
+		     li_code,
+		     san_flag,
+		     ji_bonbun,
+		     ji_bubun,
+		     building_name,
+		     building_dongho,
+		     road_codenum,
+		     road_code,
+		     road_bonbun,
+		     road_bubun,
+		     full_addr,
+		     full_addr_road,
+		     location_x,
+		     location_y
+     		from afd_Nation_Address
+     		order by seq DESC
+   </select>
+   
+   <select id="getHeadOfficeAddrList" parameterType="com.mrs.Vo.HeadOffice_AddrVO" resultType="com.mrs.Vo.HeadOffice_AddrVO">
+	      SELECT seq,
+			     city_code,
+			     gu_code,
+			     town_code,
+			     dong_code,
+			     li_code,
+			     san_flag,
+			     ji_bonbun,
+			     ji_bubun,
+			     building_name,
+			     building_dongho,
+			     road_codenum,
+			     road_code,
+			     road_bonbun,
+			     road_bubun,
+			     full_addr,
+			     full_addr_road,
+			     location_x,
+			     location_y
+	    FROM	afd_Nation_Address
+	    WHERE	1=1
+	    <if test="city_code != '' and city_code != null">
+	    	AND city_code LIKE '%${city_code}%'	
+	    </if>
+	    <if test="gu_code != '' and gu_code != null">
+	    	AND gu_code LIKE '%${gu_code}%'	
+	    </if>
+	    <if test="town_code != '' and town_code != null">
+	    	AND town_code LIKE '%${town_code}%'	
+	    </if>
+	    <if test="dong_code != '' and dong_code != null">
+	    	AND dong_code LIKE '%${dong_code}%'	
+	    </if>
+	    <if test="li_code != '' and li_code != null">
+	    	AND li_code LIKE '%${li_code}%'	
+	    </if>
+	    <if test="san_flag != '' and san_flag != null">
+	    	AND san_flag LIKE '%${san_flag}%'	
+	    </if>
+	    <if test="ji_bonbun != '' and ji_bonbun != null">
+	    	AND ji_bonbun LIKE '%${ji_bonbun}%'	
+	    </if>
+	    <if test="ji_bubun != '' and ji_bubun != null">
+	    	AND ji_bubun LIKE '%${ji_bubun}%'	
+	    </if>
+	    <if test="building_name != '' and building_name != null">
+	    	AND building_name LIKE '%${building_name}%'	
+	    </if>
+	    <if test="building_dongho != '' and building_dongho != null">
+	    	AND building_dongho LIKE '%${building_dongho}%'	
+	    </if>
+	    <if test="road_codenum != '' and road_codenum != null">
+	    	AND road_codenum LIKE '%${road_codenum}%'	
+	    </if>
+	    <if test="road_code != '' and road_code != null">
+	    	AND road_code LIKE '%${road_code}%'	
+	    </if>
+	    <if test="road_bonbun != '' and road_bonbun != null">
+	    	AND road_bonbun LIKE '%${road_bonbun}%'	
+	    </if>
+	    <if test="road_bubun != '' and road_bubun != null">
+	    	AND road_bubun LIKE '%${road_bubun}%'	
+	    </if>
+	    <if test="road_bubun != '' and road_bubun != null">
+	    	AND road_bubun LIKE '%${road_bubun}%'	
+	    </if>
+	    ORDER BY seq DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+   
+   <select id="getHeadOfficeAddrListCount" parameterType="com.mrs.Vo.HeadOffice_AddrVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_Nation_Address
+	    WHERE	1=1
+	    <if test="city_code != '' and city_code != null">
+	    	AND city_code LIKE '%${city_code}%'	
+	    </if>
+	    <if test="gu_code != '' and gu_code != null">
+	    	AND gu_code LIKE '%${gu_code}%'	
+	    </if>
+	    <if test="town_code != '' and town_code != null">
+	    	AND town_code LIKE '%${town_code}%'	
+	    </if>
+	    <if test="dong_code != '' and dong_code != null">
+	    	AND dong_code LIKE '%${dong_code}%'	
+	    </if>
+	    <if test="li_code != '' and li_code != null">
+	    	AND li_code LIKE '%${li_code}%'	
+	    </if>
+	    <if test="san_flag != '' and san_flag != null">
+	    	AND san_flag LIKE '%${san_flag}%'	
+	    </if>
+	    <if test="ji_bonbun != '' and ji_bonbun != null">
+	    	AND ji_bonbun LIKE '%${ji_bonbun}%'	
+	    </if>
+	    <if test="ji_bubun != '' and ji_bubun != null">
+	    	AND ji_bubun LIKE '%${ji_bubun}%'	
+	    </if>
+	    <if test="building_name != '' and building_name != null">
+	    	AND building_name LIKE '%${building_name}%'	
+	    </if>
+	    <if test="building_dongho != '' and building_dongho != null">
+	    	AND building_dongho LIKE '%${building_dongho}%'	
+	    </if>
+	    <if test="road_codenum != '' and road_codenum != null">
+	    	AND road_codenum LIKE '%${road_codenum}%'	
+	    </if>
+	    <if test="road_code != '' and road_code != null">
+	    	AND road_code LIKE '%${road_code}%'	
+	    </if>
+	    <if test="road_bonbun != '' and road_bonbun != null">
+	    	AND road_bonbun LIKE '%${road_bonbun}%'	
+	    </if>
+	    <if test="road_bubun != '' and road_bubun != null">
+	    	AND road_bubun LIKE '%${road_bubun}%'	
+	    </if>
+	    <if test="road_bubun != '' and road_bubun != null">
+	    	AND road_bubun LIKE '%${road_bubun}%'	
+	    </if>
+	</select>
+	
+	<insert id="insertHeadOffice_addr" parameterType="com.mrs.Vo.HeadOffice_AddrVO">
+	    INSERT 	INTO afd_Nation_Address 
+	    (
+	     city_code,
+	     gu_code,
+	     town_code,
+	     dong_code,
+	     li_code,
+	     san_flag,
+	     ji_bonbun,
+	     ji_bubun,
+	     building_name,
+	     building_dongho,
+	     road_codenum,
+	     road_code,
+	     road_bonbun,
+	     road_bubun,
+	     full_addr,
+	     full_addr_road,
+	     location_x,
+	     location_y
+	    )
+	    VALUES
+	    (
+	    #{city_code},
+	    #{gu_code},
+	    #{town_code},
+	    #{dong_code},
+	    #{li_code},
+	    #{san_flag},
+	    #{ji_bonbun},
+	    #{ji_bubun},
+	    #{building_name},
+	    #{building_dongho},
+	    #{road_codenum},
+	    #{road_code},
+	    #{road_bonbun},
+	    #{road_bubun},
+	    #{full_addr},
+	    #{full_addr_road},
+	    #{location_x},
+	    #{location_y}
+	    )	    	    
+	</insert>
+	
+	<update id="updateHeadOffice_addr" parameterType="com.mrs.Vo.HeadOffice_AddrVO">
+	    UPDATE afd_Nation_Address set 
+	  	 city_code = #{city_code},
+	     gu_code = #{gu_code},
+	     town_code = #{town_code},
+	     dong_code = #{dong_code},
+	     li_code = #{li_code},
+	     san_flag = #{san_flag},
+	     ji_bonbun = #{ji_bonbun},
+	     ji_bubun = #{ji_bubun},
+	     building_name = #{building_name},
+	     building_dongho = #{building_dongho},
+	     road_codenum = #{road_codenum},
+	     road_code = #{road_code},
+	     road_bonbun = #{road_bonbun},
+	     road_bubun = #{road_bubun}
+	     <!-- 
+	     full_addr = #{full_addr},
+	     full_addr_road = #{full_addr_road},
+	     location_x = #{location_x},
+	     location_y = #{location_y}
+	      -->
+	    where seq = #{seq}
+	</update>
+	
+	<delete id="deleteHeadOffice_addr" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_Nation_Address	    
+	    WHERE	seq = #{seq}	    
+	</delete>
+	
+	<!-- 전국 시/도 시군구 정보 메뉴 -->
+	<select id="getOfficeListCitygu" parameterType="com.mrs.Vo.HeadOffice_CityguVO" resultType="com.mrs.Vo.HeadOffice_CityguVO">
+      select seq,
+		     city_code,
+		     gu_code,
+		     town_code
+     		 from afd_Nation_CityGu_Code
+     		 order by seq DESC
+   </select>
+   
+   <select id="getHeadOfficeCityguList" parameterType="com.mrs.Vo.HeadOffice_CityguVO" resultType="com.mrs.Vo.HeadOffice_CityguVO">
+	      SELECT seq,
+			     city_code,
+			     gu_code,
+			     town_code
+	    FROM	afd_Nation_CityGu_Code
+	    WHERE	1=1
+	    <if test="city_code != '' and city_code != null">
+	    	AND city_code LIKE '%${city_code}%'	
+	    </if>
+	    <if test="gu_code != '' and gu_code != null">
+	    	AND gu_code LIKE '%${gu_code}%'	
+	    </if>
+	    <if test="town_code != '' and town_code != null">
+	    	AND town_code LIKE '%${town_code}%'	
+	    </if>
+	    ORDER BY seq DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+   
+   <select id="getHeadOfficeCityguListCount" parameterType="com.mrs.Vo.HeadOffice_CityguVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_Nation_CityGu_Code
+	    WHERE	1=1
+	    <if test="city_code != '' and city_code != null">
+	    	AND city_code LIKE '%${city_code}%'	
+	    </if>
+	    <if test="gu_code != '' and gu_code != null">
+	    	AND gu_code LIKE '%${gu_code}%'	
+	    </if>
+	    <if test="town_code != '' and town_code != null">
+	    	AND town_code LIKE '%${town_code}%'	
+	    </if>
+	</select>
+	
+	<insert id="insertHeadOffice_citygu" parameterType="com.mrs.Vo.HeadOffice_CityguVO">
+	    INSERT 	INTO afd_Nation_CityGu_Code 
+	    (
+	     city_code,
+	     gu_code,
+	     town_code
+	    )
+	    VALUES
+	    (
+	    #{city_code},
+	    #{gu_code},
+	    #{town_code}
+	    )	    	    
+	</insert>
+	
+	<update id="updateHeadOffice_citygu" parameterType="com.mrs.Vo.HeadOffice_CityguVO">
+	    UPDATE afd_Nation_CityGu_Code set 
+	  	 city_code = #{city_code},
+	     gu_code = #{gu_code},
+	     town_code = #{town_code}
+	    where seq = #{seq}
+	</update>
+	
+	<delete id="deleteHeadOffice_citygu" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_Nation_CityGu_Code	    
+	    WHERE	seq = #{seq}	    
+	</delete>
+	
+	<!-- 전국 동 코드 정보 메뉴 -->
+		<select id="getOfficeListDong" parameterType="com.mrs.Vo.HeadOffice_DongVO" resultType="com.mrs.Vo.HeadOffice_DongVO">
+      select seq,
+		     city_code,
+		     gu_code,
+		     road_code
+     		 from afd_Nation_Dong_Code
+     		 order by seq DESC
+   </select>
+   
+   <select id="getHeadOfficeDongList" parameterType="com.mrs.Vo.HeadOffice_DongVO" resultType="com.mrs.Vo.HeadOffice_DongVO">
+	      SELECT seq,
+			     city_code,
+			     gu_code,
+			     dong_code
+	    FROM	afd_Nation_Dong_Code
+	    WHERE	1=1
+	    <if test="city_code != '' and city_code != null">
+	    	AND city_code LIKE '%${city_code}%'	
+	    </if>
+	    <if test="gu_code != '' and gu_code != null">
+	    	AND gu_code LIKE '%${gu_code}%'	
+	    </if>
+	    <if test="dong_code != '' and dong_code != null">
+	    	AND dong_code LIKE '%${dong_code}%'	
+	    </if>
+	    ORDER BY seq DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+   
+   <select id="getHeadOfficeDongListCount" parameterType="com.mrs.Vo.HeadOffice_DongVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_Nation_Dong_Code
+	    WHERE	1=1
+	    <if test="city_code != '' and city_code != null">
+	    	AND city_code LIKE '%${city_code}%'	
+	    </if>
+	    <if test="gu_code != '' and gu_code != null">
+	    	AND gu_code LIKE '%${gu_code}%'	
+	    </if>
+	    <if test="dong_code != '' and dong_code != null">
+	    	AND dong_code LIKE '%${dong_code}%'	
+	    </if>
+	</select>
+	
+	<insert id="insertHeadOffice_dong" parameterType="com.mrs.Vo.HeadOffice_DongVO">
+	    INSERT 	INTO afd_Nation_Dong_Code 
+	    (
+	     city_code,
+	     gu_code,
+	     dong_code
+	    )
+	    VALUES
+	    (
+	    #{city_code},
+	    #{gu_code},
+	    #{dong_code}
+	    )	    	    
+	</insert>
+	
+	<update id="updateHeadOffice_dong" parameterType="com.mrs.Vo.HeadOffice_DongVO">
+	    UPDATE afd_Nation_Dong_Code set 
+	  	 city_code = #{city_code},
+	     gu_code = #{gu_code},
+	     dong_code = #{dong_code}
+	    where seq = #{seq}
+	</update>
+	
+	<delete id="deleteHeadOffice_dong" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_Nation_Dong_Code	    
+	    WHERE	seq = #{seq}	    
+	</delete>
+	
+	<!-- 가상계좌 은행 관리 메뉴 -->
+	<select id="getHeadOfficeBankList" parameterType="com.mrs.Vo.HeadOffice_BankVO" resultType="com.mrs.Vo.HeadOffice_BankVO">
+	      SELECT bank_id,
+	      		 v_bank,
+	      		 bank_use
+	    FROM	afd_bankinfo
+	    WHERE	1=1
+	    ORDER BY bank_id ASC
+	</select>
+   
+   <select id="getHeadOfficeBankListCount" parameterType="com.mrs.Vo.HeadOffice_BankVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_bankinfo
+	    WHERE	1=1
+	</select>
+	
+	<update id="updatebank" parameterType="com.mrs.Vo.HeadOffice_BankVO">
+	    UPDATE afd_bankinfo set 
+	  	 bank_use = 1
+	    where bank_id = #{bank_id}
+	</update>
+	
+	<update id="deletebank" parameterType="com.mrs.Vo.HeadOffice_BankVO">
+	    UPDATE afd_bankinfo set 
+	  	 bank_use = 0
+	    where bank_id = #{bank_id}
+	</update>
+	
+	<!-- 모 계좌 정보 관리  -->
+	<select id="getHead_ConfigList" parameterType="com.mrs.Vo.HeadOffice_ConfigVO" resultType="com.mrs.Vo.HeadOffice_ConfigVO">
+	      SELECT 
+	      		 b_sequence,
+	      		 h_http_ip_addr,
+	      		 b_cs_address_web_link,
+	      		 h_bank,
+	      		 h_account,
+	      		 h_name,
+	      		 h_institution_code
+	    FROM	 afd_Config
+	    WHERE	1=1
+	    <if test="h_bank != '' and h_bank != null">
+	    	AND h_bank LIKE '%${h_bank}%'	
+	    </if>
+	    <if test="h_account != '' and h_account != null">
+	    	AND h_account LIKE '%${h_account}%'	
+	    </if>
+	    <if test="h_name != '' and h_name != null">
+	    	AND h_name LIKE '%${h_name}%'	
+	    </if>
+	     <if test="h_institution_code != '' and h_institution_code != null">
+	    	AND h_institution_code LIKE '%${h_institution_code}%'	
+	    </if>
+	    ORDER BY h_bank DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+   
+   <select id="getHead_ConfigListCount" parameterType="com.mrs.Vo.HeadOffice_ConfigVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM afd_Config
+	    WHERE	1=1
+	    <if test="h_bank != '' and h_bank != null">
+	    	AND h_bank LIKE '%${h_bank}%'	
+	    </if>
+	    <if test="h_account != '' and h_account != null">
+	    	AND h_account LIKE '%${h_account}%'	
+	    </if>
+	    <if test="h_name != '' and h_name != null">
+	    	AND h_name LIKE '%${h_name}%'	
+	    </if>
+	     <if test="h_institution_code != '' and h_institution_code != null">
+	    	AND h_institution_code LIKE '%${h_institution_code}%'	
+	    </if>
+	</select>
+	
+	<insert id="insertHeadOffice_config" parameterType="com.mrs.Vo.HeadOffice_ConfigVO">
+	    INSERT 	INTO afd_config
+	    (
+	     B_SEQUENCE,
+	     <!-- 
+	     H_HTTP_IP_Addr,
+	     B_CS_Address_Web_Link,
+	      -->
+	     h_bank,
+	     h_account,
+	     h_name,
+	     h_institution_code
+	    )
+	    VALUES
+	    (
+	    0,
+	    <!-- 
+	    #{h_http_ip_addr},
+	    #{b_cs_address_web_link},
+	     -->
+	    #{h_bank},
+	    #{h_account},
+	    #{h_name},
+	    #{h_institution_code}
+	    )	    	    
+	</insert>
+	
+	<update id="updateHeadOffice_config" parameterType="com.mrs.Vo.HeadOffice_ConfigVO">
+	    UPDATE afd_config set 
+		<if test="b_sequence != '' and b_sequence != null"> 
+				B_SEQUENCE = #{b_sequence}, 
+		</if>
+		<if test="h_http_ip_addr != '' and h_http_ip_addr != null"> 
+			     H_HTTP_IP_Addr = #{h_http_ip_addr},
+		</if>
+		<if test="b_cs_address_web_link != '' and b_cs_address_web_link != null"> 
+			     B_CS_Address_Web_Link = #{b_cs_address_web_link},
+		</if>
+	  	 h_bank = #{h_bank},
+	     h_account = #{h_account},
+	     h_name = #{h_name},
+	     h_institution_code = #{h_institution_code}
+	    where B_SEQUENCE = #{b_sequence}
+	</update>
+	
+	<delete id="deleteHeadOffice_config" parameterType="String">
+	    DELETE 	
+	    FROM 	afd_config	    
+	    WHERE	B_SEQUENCE = #{b_sequence}	    
+	</delete>
+</mapper>

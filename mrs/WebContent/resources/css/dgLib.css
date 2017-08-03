@@ -1,0 +1,38 @@
+@import url(http://fonts.googleapis.com/earlyaccess/jejugothic.css);
+
+	/* ���̾� �˾� START */
+	
+
+	.layer {display:none; position:fixed; _position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:100;}
+	.layer .bg {position:fixed; top:0px; left:0px; width:100%; height:100%; background:#000; opacity:.5; filter:alpha(opacity=50);}
+	.layer .pop-layer {display:block;}
+
+	.pop-layer {display:none; position: absolute; top: 50%; left: 50%; width: 410px; height:auto;  background-color:#fff; border: 5px solid #3571B5; z-index: 10;}	
+	.pop-layer .pop-container {padding: 20px 25px;}
+	.pop-layer p.ctxt {color: #666; line-height: 25px;}
+	.pop-layer .btn-r {width: 100%; margin:10px 0 20px; padding-top: 10px; border-top: 1px solid gray; text-align:right;}
+	
+	.layer2 {display:none; position:fixed; _position:absolute; top:0; left:0; width:100%; height:100%; z-index:100;}
+	.layer2 .bg2 {position:absolute; top:0; left:0; width:100%; height:100%; background:#000; opacity:.5; filter:alpha(opacity=50);}
+	.layer2 .pop-layer2 {display:block;}
+
+	.pop-layer2 {display:none; position: absolute; top: 50%; left: 50%; width: 410px; height:auto;  background-color:#fff; border: 5px solid #3571B5; z-index: 10;}	
+	.pop-layer2 .pop-container2 {padding: 20px 25px;}
+	.pop-layer2 p.ctxt {color: #666; line-height: 25px;}
+	.pop-layer2 .btn-r2 {width: 100%; margin:10px 0 20px; padding-top: 10px; border-top: 1px solid gray; text-align:right;}
+	
+	.layer0 {display:none; position:fixed; _position:absolute; top:0; left:0; width:100%; height:100%; z-index:100;}
+	.layer0 .bg0 {position:absolute; top:0; left:0; width:100%; height:100%; background:#000; opacity:.5; filter:alpha(opacity=50);}
+	.layer0 .pop-layer0 {display:block;}
+
+	.pop-layer0 {display:none; position: absolute; top: 50%; left: 50%; width: 410px; height:auto;  background-color:#fff; border: 5px solid #3571B5; z-index: 10;}	
+	.pop-layer0 .pop-container0 {padding: 20px 25px;}
+	.pop-layer0 p.ctxt {color: #666; line-height: 25px;}
+	.pop-layer0 .btn-r0 {width: 100%; margin:10px 0 20px; padding-top: 10px; border-top: 1px solid gray; text-align:right;}
+
+	
+	/* ���̾� �˾� END */
+	
+	.layerTitle {width: 100%; margin:0px 0 10px; padding-bottom: 5px;padding-top: 5px; border-bottom: 1px solid gray; text-align:left; font-size:15pt; }
+	.underline {width: 100%; margin:0px 0 10px; padding-bottom: 5px;padding-top: 5px; border-bottom: 1px solid lightgray; text-align:left;}
+	.topline {width: 100%; margin:10px 0 20px; padding-top: 10px; border-top: 1px solid #DDD; text-align:left;}

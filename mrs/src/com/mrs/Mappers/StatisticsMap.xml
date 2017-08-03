@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Statistics">
+<!-- 지사별 배달 통계 -->
+   <select id="getStatisticsList" parameterType="com.mrs.Vo.StatisticsVO" resultType="com.mrs.Vo.StatisticsVO">
+	    SELECT	a.b_id,
+	     <choose>
+			<when test ="searchFlag_date == 1 or searchFlag_date == null">
+			    a.hour,
+			</when>
+			<otherwise>
+				a.order_date,
+		 	</otherwise>
+		 </choose>
+			    a.total_count,
+			    a.succ_count,
+			    a.fail_count,
+			    a.s_cancel_count,
+			    a.s_reject_count,
+			    a.r_reject_count,
+			    a.addr_fail_count,
+			    a.product_fail_count,
+			    a.delay_reject_count,
+			    a.etc_fail_count,
+			    a.bc_delay_reject_count,
+			    a.rider_bad_reject_count,
+			    a.etc_reject_count,
+			    a.traffic_jam_count,
+			    a.machine_trouble_count,
+			    a.addr_nosearch__count,
+			    a.somany_order_count,
+			    a.pickup_delay_count,
+			    a.etc_delay_count,
+			    a.total_purchase_price,
+			    a.call_amount,
+			    b.b_name
+	    FROM	
+	    <choose>
+			<when test ="searchFlag_date == 1 or searchFlag_date == null">
+	    		afd_Branch_Hour_Stat a
+	    	</when>
+	    	<otherwise>
+	    		afd_Branch_Daily_Stat a
+	    	</otherwise>
+	    </choose>
+	    left outer join afd_branchInfo b 
+	    on a.b_id = b.b_id
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+	    <if test="searchFlag_date == 1">
+	    <choose>
+			<when test ="start_time != '' and start_time != null">
+			    AND a.hour <![CDATA[ >= ]]> '${start_time}' AND a.hour <![CDATA[ <= ]]> '${end_time}'
+			</when>
+			<otherwise>
+			   	AND a.hour <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.hour <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+		</if>
+		 <if test="searchFlag_date == 2">
+	    <choose>
+			<when test ="start_time != '' and start_time != null">
+			    AND a.order_date <![CDATA[ >= ]]> left(${start_time}, 8) AND a.order_date <![CDATA[ <= ]]> left(${end_time}, 8)
+			</when>
+			<otherwise>
+			   	AND a.order_date <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.order_date <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+		</if>
+		 <choose>
+			<when test ="searchFlag_date == 1 or searchFlag_date == null">
+	   			ORDER BY a.hour DESC
+	   		</when>
+	   		<otherwise>
+	   			ORDER BY a.order_date DESC
+	   		</otherwise>
+	   	</choose>
+	    <include refid="Paging.mysql"/>
+	</select>
+	
+	 <select id="getStatisticsList_all" parameterType="com.mrs.Vo.StatisticsVO" resultType="com.mrs.Vo.StatisticsVO">
+	    SELECT	a.b_id,
+	     <choose>
+			<when test ="searchFlag_date == 1 or searchFlag_date == null">
+			    a.hour,
+			</when>
+			<otherwise>
+				a.order_date,
+		 	</otherwise>
+		 </choose>
+			IFNULL(sum(a.total_count),'0') as total_cnt, 
+			IFNULL(sum(a.succ_count),'0') as succ_cnt, 
+			IFNULL(sum(a.fail_count),'0') as fail_cnt,
+			IFNULL(sum(a.s_cancel_count),'0') as s_cancel_cnt, 
+			IFNULL(sum(a.s_reject_count),'0') as s_reject_cnt, 
+			IFNULL(sum(a.r_reject_count),'0') as r_reject_cnt, 
+			IFNULL(sum(a.addr_fail_count),'0') as addr_fail_cnt, 
+			IFNULL(sum(a.product_fail_count),'0') as product_fail_cnt, 
+			IFNULL(sum(a.delay_reject_count),'0') as delay_reject_cnt, 
+			IFNULL(sum(a.etc_fail_count),'0') as etc_fail_cnt, 
+			IFNULL(sum(a.bc_delay_reject_count),'0') as bc_delay_reject_cnt, 
+			IFNULL(sum(a.rider_bad_reject_count),'0') as rider_bad_reject_cnt, 
+			IFNULL(sum(a.etc_reject_count),'0') as etc_reject_cnt, 
+			IFNULL(sum(a.traffic_jam_count),'0') as traffic_jam_cnt, 
+			IFNULL(sum(a.machine_trouble_count),'0') as machine_trouble_cnt, 
+			IFNULL(sum(a.addr_nosearch__count),'0') as addr_nosearch__cnt, 
+			IFNULL(sum(a.somany_order_count),'0') as somany_order_cnt, 
+			IFNULL(sum(a.pickup_delay_count),'0') as pickup_delay_cnt, 
+			IFNULL(sum(a.etc_delay_count),'0') as etc_delay_cnt, 
+			IFNULL(sum(a.total_purchase_price),'0') as total_purchase_price_all, 
+			IFNULL(sum(a.call_amount),'0') as call_amount_all,
+			b.b_name  
+	    FROM	
+	    <choose>
+			<when test ="searchFlag_date == 1 or searchFlag_date == null">
+	    		afd_Branch_Hour_Stat a
+	    	</when>
+	    	<otherwise>
+	    		afd_Branch_Daily_Stat a
+	    	</otherwise>
+	    </choose>
+	    left outer join afd_branchinfo b
+	    on a.b_id = b.b_id
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+	    <if test="searchFlag_date == 1">
+	    <choose>
+			<when test ="start_time != '' and start_time != null">
+			    AND a.hour <![CDATA[ >= ]]> '${start_time}' AND a.hour <![CDATA[ <= ]]> '${end_time}'
+			</when>
+			<otherwise>
+			   	AND a.hour <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.hour <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+		</if>
+		 <if test="searchFlag_date == 2">
+	    <choose>
+			<when test ="start_time != '' and start_time != null">
+			     AND a.order_date <![CDATA[ >= ]]> left('${start_time}', 8) AND a.order_date <![CDATA[ <= ]]> left('${end_time}', 8)
+			</when>
+			<otherwise>
+			   	AND a.order_date <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.order_date <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+		</if>
+		 <choose>
+			<when test ="searchFlag_date == 1 or searchFlag_date == null">
+	   			ORDER BY a.hour DESC
+	   		</when>
+	   		<otherwise>
+	   			ORDER BY a.order_date DESC
+	   		</otherwise>
+	   	</choose>
+	</select>
+   
+   <select id="getStatisticsListCount" parameterType="com.mrs.Vo.StatisticsVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM 
+	    <choose>
+			<when test ="searchFlag_date == 1 or searchFlag_date == null">
+	    		afd_Branch_Hour_Stat a
+	    	</when>
+	    	<otherwise>
+	    		afd_Branch_Daily_Stat a
+	    	</otherwise>
+	    </choose> 
+	    left outer join afd_branchinfo b
+	    on a.b_id = b.b_id
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+	    <if test="searchFlag_date == 1">
+	    <choose>
+			<when test ="start_time != '' and start_time != null">
+			    AND a.hour <![CDATA[ >= ]]> '${start_time}' AND a.hour <![CDATA[ <= ]]> '${end_time}'
+			</when>
+			<otherwise>
+			   	AND a.hour <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.hour <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+		</if>
+		 <if test="searchFlag_date == 2">
+	    <choose>
+			<when test ="start_time != '' and start_time != null">
+			     AND a.order_date <![CDATA[ >= ]]> left('${start_time}', 8) AND a.order_date <![CDATA[ <= ]]> left('${end_time}', 8)
+			</when>
+			<otherwise>
+			   	AND a.order_date <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.order_date <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+		</if>
+	</select>
+	
+	<!-- 지사별 배달기사 등록 통계 -->
+   <select id="getStatistics_RiderList" parameterType="com.mrs.Vo.Statistics_RiderVO" resultType="com.mrs.Vo.Statistics_RiderVO">
+	    SELECT	a.b_id,
+	    		a.r_id,
+			    a.order_date,
+			    a.total_count,
+			    a.succ_count,
+			    a.fail_count,
+			    a.call_amount,
+			    b.b_name,
+			    convert(AES_DECRYPT(UNHEX(from_base64(c.r_name)), 'mrs_delivery!@#$')using UTF8) as r_name
+	    FROM	afd_rider_daily_stat a
+	    left outer join afd_branchinfo b
+	    on a.b_id = b.b_id
+	    left outer join afd_riderinfo c
+	    on a.r_id = c.r_id
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+	     <if test="r_name != '' and r_name != null">
+	    	AND AES_DECRYPT(UNHEX(from_base64(c.r_name)), 'mrs_delivery!@#$') LIKE '%${r_name}%'
+	    </if>
+	    <choose>
+			<when test ="start_date != '' and start_date != null">
+			    AND a.order_date <![CDATA[ >= ]]> left(${start_date}, 8) AND a.order_date <![CDATA[ <= ]]> left(${end_date}, 8)
+			</when>
+			<otherwise>
+			   	AND a.order_date <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.order_date <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+	    ORDER BY a.order_date DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+	
+	<select id="getStatistics_RiderList_all" parameterType="com.mrs.Vo.Statistics_RiderVO" resultType="com.mrs.Vo.Statistics_RiderVO">
+	  SELECT	a.b_id,
+	    		a.r_id,
+			    a.order_date,
+			    IFNULL(sum(a.total_count),'0') as total_cnt,
+			    IFNULL(sum(a.succ_count),'0') as succ_cnt,
+			    IFNULL(sum(a.fail_count),'0') as fail_cnt,
+			    IFNULL(sum(a.call_amount),'0') as call_amount_cnt,
+			    b.b_name,
+			    convert(AES_DECRYPT(UNHEX(from_base64(c.r_name)), 'mrs_delivery!@#$')using UTF8) as r_name
+	    FROM	afd_rider_daily_stat a
+	    left outer join afd_branchinfo b
+	    on a.b_id = b.b_id
+	    left outer join afd_riderinfo c
+	    on a.r_id = c.r_id
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+	     <if test="r_name != '' and r_name != null">
+	    	AND AES_DECRYPT(UNHEX(from_base64(c.r_name)), 'mrs_delivery!@#$') LIKE '%${r_name}%'
+	    </if>
+	    <choose>
+			<when test ="start_date != '' and start_date != null">
+			    AND a.order_date <![CDATA[ >= ]]> left(${start_date}, 8) AND a.order_date <![CDATA[ <= ]]> left(${end_date}, 8)
+			</when>
+			<otherwise>
+			   	AND a.order_date <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.order_date <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+	    ORDER BY a.order_date DESC
+	</select>
+	
+   <select id="getStatistics_RiderListCount" parameterType="com.mrs.Vo.Statistics_RiderVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM	afd_rider_daily_stat a
+	    left outer join afd_branchinfo b
+	    on a.b_id = b.b_id
+	    left outer join afd_riderinfo c
+	    on a.r_id = c.r_id
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+	     <if test="r_name != '' and r_name != null">
+	    	AND AES_DECRYPT(UNHEX(from_base64(c.r_name)), 'mrs_delivery!@#$') LIKE '%${r_name}%'
+	    </if>
+	    <choose>
+			<when test ="start_date != '' and start_date != null">
+			    AND a.order_date <![CDATA[ >= ]]> left(${start_date}, 8) AND a.order_date <![CDATA[ <= ]]> left(${end_date}, 8)
+			</when>
+			<otherwise>
+			   	AND a.order_date <![CDATA[>]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s') AND a.order_date <![CDATA[<]]>  DATE_FORMAT(CURDATE(), '%Y-%m-%d %H:%i:%s')
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 상점별 통계 -->
+   <select id="getStatistics_storeList" parameterType="com.mrs.Vo.Statistics_StoreVO" resultType="com.mrs.Vo.Statistics_StoreVO">
+	    SELECT	a.order_date,
+				a.b_id,
+				a.s_id,
+				a.total_count,
+				a.succ_count,
+				a.fail_count,
+				a.card_payment_count,
+				a.total_purchase_price,
+				a.call_amount,
+			    b.b_name,
+			    c.s_name
+	    FROM	
+	    		afd_Store_Daily_Stat a
+	    left outer join afd_branchInfo b 
+	    on a.b_id = b.b_id
+	    left outer join afd_storeInfo c 
+	    on a.s_id = c.s_id
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+	     <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'	
+	    </if>
+	    <if test="s_name != '' and s_name != null">
+	    	AND c.s_name LIKE '%${s_name}%'	
+	    </if>
+			    AND a.order_date <![CDATA[ >= ]]> left('${start_time}', 8) AND a.order_date <![CDATA[ <= ]]> left('${end_time}', 8)
+	   		ORDER BY a.order_date DESC
+	    <include refid="Paging.mysql"/>
+	</select>
+	
+	 <select id="getStatisticsList_store_all" parameterType="com.mrs.Vo.Statistics_StoreVO" resultType="com.mrs.Vo.Statistics_StoreVO">
+		SELECT	
+			a.order_date,
+			a.b_id,
+			a.s_id,
+			a.total_count,
+			IFNULL(sum(a.total_count),'0') as total_cnt, 
+			IFNULL(sum(a.succ_count),'0') as succ_cnt, 
+			IFNULL(sum(a.fail_count),'0') as fail_cnt,
+			IFNULL(sum(a.total_purchase_price),'0') as total_purchase_price_all, 
+			IFNULL(sum(a.card_payment_count),'0') as card_payment_count_all, 
+			IFNULL(sum(a.call_amount),'0') as call_amount_all,
+		    b.b_name,
+		    c.s_name
+	    FROM	
+	    	afd_Store_Daily_Stat a
+	    left outer join afd_branchInfo b 
+	    on a.b_id = b.b_id
+	    left outer join afd_storeInfo c 
+	    on a.s_id = c.s_id
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+	     <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'	
+	    </if>
+	    <if test="s_name != '' and s_name != null">
+	    	AND c.s_name LIKE '%${s_name}%'	
+	    </if>
+			     AND a.order_date <![CDATA[ >= ]]> left('${start_time}', 8) AND a.order_date <![CDATA[ <= ]]> left('${end_time}', 8)
+	   		ORDER BY a.order_date DESC
+	</select>
+   
+   <select id="getStatistics_storeListCount" parameterType="com.mrs.Vo.Statistics_StoreVO" resultType="Integer">
+	    SELECT	COUNT(*)
+	    FROM	
+	    	afd_Store_Daily_Stat a
+	    left outer join afd_branchInfo b 
+	    on a.b_id = b.b_id
+	    left outer join afd_storeInfo c 
+	    on a.s_id = c.s_id
+	    WHERE	1=1
+	    <if test="b_id != '' and b_id != null">
+	    	AND a.b_id LIKE '%${b_id}%'	
+	    </if>
+	    <if test="b_name != '' and b_name != null">
+	    	AND b.b_name LIKE '%${b_name}%'	
+	    </if>
+	     <if test="s_id != '' and s_id != null">
+	    	AND a.s_id LIKE '%${s_id}%'	
+	    </if>
+	    <if test="s_name != '' and s_name != null">
+	    	AND c.s_name LIKE '%${s_name}%'	
+	    </if>
+			     AND a.order_date <![CDATA[ >= ]]> left('${start_time}', 8) AND a.order_date <![CDATA[ <= ]]> left('${end_time}', 8)
+	</select>
+</mapper>
